@@ -67,7 +67,7 @@ class RequestClient:
             "now": json_data.get('f46'),  # 今开
             "max": json_data.get('f44'),  # 最高
             "min": json_data.get('f45'),  # 最低
-            "turnover": json_data.get('f47'),  # 成交量
+            "turnover": to_yi(json_data.get('f47')),  # 成交量
             "market": to_yi(json_data.get('f116')),  # 总市值
             "float_market": to_yi(json_data.get('f117')),  # 流通市值
             "P_E": json_data.get('f162'),  # 市盈
@@ -216,7 +216,7 @@ class RequestClient:
 
 def main():
     client = RequestClient()
-    stock_data = client.stock_trends('1.600589')
+    stock_data = client.stock_get('002640')
     print(stock_data)
 
 

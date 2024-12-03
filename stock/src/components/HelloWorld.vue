@@ -191,7 +191,20 @@ const doFunc = () => {
 }
 // ECHART
 
-
+const formatNumber = (number) => {
+  const n = parseInt(number);
+  let s = (n / 100000000).toFixed(2);
+  if (s < 1) {
+    s = (n / 10000).toFixed(2)
+    if (s < 1) {
+        return `${n}`;
+    } else {
+      return `${s}万`;
+    }
+  } else {
+    return `${s}亿`;
+  }
+};
 const initxData = (klineData) => {
   const xData = [];
   for (let i = 0; i < klineData.length; i++) {
@@ -324,16 +337,17 @@ const EchartMain = (title, data) => {
         param = param[0];
         const seriesName = param.seriesName;
         if (seriesName === "Volume") {
+          const res = formatNumber(param.data[1]);
           return [
             "时间: " + param.data[3] + '<hr size=1 >',
-            "成交量: " + param.data[1] + "<br/>",
+            "成交量: " + res + "<br/>",
           ].join("");
         } else {
           return [
             "时间: " + param.data[6] + '<hr size=1 >',
             "价格: " + param.data[1] + "<br/>",
             "涨跌额: " + param.data[2] + "<br/>",
-            "成交量: " + param.data[3] + "<br/>",
+            "成交量: " + formatNumber(param.data[3]) + "<br/>",
             "涨跌幅: " + param.data[4] + "<br/>"
           ].join("");
         }
