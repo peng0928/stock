@@ -1,0 +1,7 @@
+aioredis==2.0.1
+fastapi==0.115.5
+loguru==0.7.2
+PrSpiders==2.1.7
+pydantic==2.10.2
+Requests==2.32.3
+uvicorn==0.32.1
