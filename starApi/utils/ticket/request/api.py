@@ -52,13 +52,14 @@ class RequestClient:
             "fltt": "2",
             "invt": "2",
             "secid": code,
-            "fields": "f57,f58,f107,f43,f169,f170,f171,f47,f48,f60,f46,f44,f45,f168,f50,f162,f177,f117,f167,f116",
+            "fields": "f57,f58,f107,f43,f169,f170,f171,f47,f48,f60,f46,f44,f45,f168,f50,f162,f177,f117,f167,f116,f168",
             "ut": "",
             "cb": "",
             "_": ""
         }
         response = self.session.get(url, params=params)
         json_data = response.json()
+        print(json_data)
         json_data = json_data.get('data') or {}
         item = {
             "cha": json_data.get('f169'),  # 涨跌额
@@ -152,6 +153,7 @@ class RequestClient:
         json_data = json_data.get('data') or {}
         prePrice = json_data.get('prePrice') or {}
         trends = json_data.get('trends') or {}
+        name = json_data.get('name')
         if trends:
             oepn = trends[0].split(',')[1]
             end = trends[-1].split(',')[2]
@@ -161,13 +163,15 @@ class RequestClient:
             end = '-'
             result = '-'
         item = {
-            "name": json_data.get('name'),  # 股票名称
+            "name": name,  # 股票名称
             "code": json_data.get('code'),  # 股票代码
             "oepn": oepn,  # 开盘价
             "end": end,  # 收盘价
             "rate": result,  # 比例
             # "trends": trends,  # 信息
         }
+        if not name:
+            return {}
         return item
 
     @catch_exceptions
@@ -216,7 +220,7 @@ class RequestClient:
 
 def main():
     client = RequestClient()
-    stock_data = client.stock_get('002640')
+    stock_data = client.stock_get('002045')
     print(stock_data)
 
 

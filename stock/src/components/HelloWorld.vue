@@ -26,29 +26,44 @@
       </div>
     </div>
     <div class="w-10/12 m-4">
-      <div class="text-lg font-medium flex">
-        <p class="mr-2">{{ stock.name }}</p>
-        <p>{{ stock.code }}</p>
-        <p class="text-sm font-medium ml-3 pt-1">成交量：{{ stock.turnover }}</p>
-        <p class="text-sm font-medium ml-3 pt-1">总市值：{{ stock.market }}</p>
-        <p class="text-sm font-medium ml-3 pt-1">流通市值：{{ stock.float_market }}</p>
-        <p class="text-sm font-medium ml-3 pt-1">市盈：{{ stock.P_E }}</p>
-        <p class="text-sm font-medium ml-3 pt-1">市净：{{ stock.market_net }}</p>
+      <div class="text-lg font-medium flex justify-between">
+        <div>
+          <div class="flex">
+            <p class="mr-2">{{ stock.name }}</p>
+            <p>{{ stock.code }}</p>
+          </div>
+          <div class="text-lg font-medium flex">
+            <p class="mr-2">开：{{ stock.now }}</p>
+            <p class="ml-3" :class="chgColor(stock.max, stock.now)">高：{{ stock.max }}</p>
+            <p class="ml-3" :class="chgColor(stock.min, stock.now)">低：{{ stock.min }}</p>
+          </div>
+          <div class="flex">
+            <p class="font-semibold text-4xl ml-3" :class="chgColor()">{{ stock.end }}</p>
+            <icon-font :type="chgIcon()" :style="{fontSize: '35px'}"/>
+          </div>
+          <div class="text-lg font-medium flex">
+            <p class="font-semibold text-xl mr-2 ml-1" :class="chgColor()">{{ stock.cha }}</p>
+            <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
+          </div>
+        </div>
+        <div class="text-left font-light flex text-sm">
+          <div class="w-auto p-4 mx-2 border-2 border-blue-200 rounded-lg">
+            <p class="ml-2 pt-1 my-1">成交量：{{ stock.turnover }}</p>
+            <p class="ml-2 pt-1 my-1">总市值：{{ stock.market }}</p>
+            <p class="ml-2 pt-1 my-1">流通市值：{{ stock.float_market }}</p>
+            <p class="ml-2 pt-1 my-1">市盈：{{ stock.P_E }}</p>
+            <p class="ml-2 pt-1 my-1">市净：{{ stock.market_net }}</p>
+          </div>
+          <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg">
+            <div v-for="(item, index) in stockInfo" :key="index" class="flex justify-between my-1">
+              <div>{{ item.n1 }}:11</div>
+              <div class="pl-10">{{ item.n2 }}:22</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="text-lg font-medium flex">
-        <p class="mr-2">开：{{ stock.now }}</p>
-        <p class="ml-3" :class="chgColor(stock.max, stock.now)">高：{{ stock.max }}</p>
-        <p class="ml-3" :class="chgColor(stock.min, stock.now)">低：{{ stock.min }}</p>
-      </div>
-      <div class="flex">
-        <p class="font-semibold text-4xl ml-3" :class="chgColor()">{{ stock.end }}</p>
-        <icon-font :type="chgIcon()" :style="{fontSize: '35px'}"/>
-      </div>
-      <div class="text-lg font-medium flex">
-        <p class="font-semibold text-xl mr-2 ml-1" :class="chgColor()">{{ stock.cha }}</p>
-        <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
-      </div>
-      <div class="container mx-auto pt-10">
+
+      <div class="container mx-auto ">
         <div id="main" class="" style="min-height: 60vh"></div>
       </div>
     </div>
@@ -69,13 +84,24 @@ const IconFont = createFromIconfontCN({
 });
 const stockName = ref('002640')
 const state = ref({
-  check: true
+  check: false
 })
 const stockPlate = ref([])
 const stockPlateTest = ref([])
 const stock = ref({
   chg: 0
 })
+const stockInfo = ref([
+  {n1: "最新", k1: "zx", n2: "均价", k2: "jj"},
+  {n1: "涨幅", k1: "zf", n2: "涨跌", k2: 'zd'},
+  {n1: "总手", k1: "zs", n2: "金额", k2: 'je'},
+  {n1: "换手", k1: "hs", n2: "量比", k2: 'lb'},
+  {n1: "最高", k1: "zg", n2: "最低", k2: 'zdi'},
+  {n1: "今开", k1: "jk", n2: "昨收", k2: 'zs'},
+  {n1: "涨停", k1: "zt", n2: "跌停", k2: 'dt'},
+  {n1: "外盘", k1: "wp", n2: "内盘", k2: 'np'},
+
+]);
 const timer = ref([]);
 
 const chgColor = (chg = 0, v = 0) => {
@@ -197,7 +223,7 @@ const formatNumber = (number) => {
   if (s < 1) {
     s = (n / 10000).toFixed(2)
     if (s < 1) {
-        return `${n}`;
+      return `${n}`;
     } else {
       return `${s}万`;
     }

@@ -25,9 +25,13 @@ async def stock_trend(request: Request, item: StockTrend):
     hy = item.hy
     dp = item.dp
     code = item.code
+    data = []
     hy_data = ReqClient.stock_trends2(code=hy)
     dp_data = ReqClient.stock_trends2(code=dp)
-    data = [hy_data, dp_data]
+    if hy_data:
+        data.append(hy_data)
+    if dp_data:
+        data.append(dp_data)
     bk_data = ReqClient.stock_securities(code=code)
     if bk_data:
         for item in bk_data:
