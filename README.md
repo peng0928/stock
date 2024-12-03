@@ -24,7 +24,7 @@ git clone git@github.com:peng0928/stock.git
 
 ### 第二步
 
-启动后端项目：python fastapi
+启动后端项目：python3.7+ fastapi
 
 ```python
 cd starApi
