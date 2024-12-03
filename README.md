@@ -34,7 +34,7 @@ python main.py
 
 
 
-启动前端项目：vue echart antd
+启动前端项目：vue3 echart antd
 
 ```yarn
 cd stock/stock
