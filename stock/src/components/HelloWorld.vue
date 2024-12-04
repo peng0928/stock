@@ -79,7 +79,7 @@
             <div class="flex">
               <div>{{ item[0] }}</div>
               <div class="ml-4 mr-4" :class="stockColor(item[1])">{{ item[1] }}</div>
-              <div :class="indexColor(index)">{{ item[2] }}</div>
+              <div :class="indexColor(index)">{{ convertToChinese(item[2]) }}</div>
             </div>
             <div v-if="index===4">
               <div class="flex">
@@ -104,6 +104,7 @@ import {ref, computed, onMounted} from 'vue'
 import {createFromIconfontCN} from '@ant-design/icons-vue';
 import * as echarts from 'echarts';
 import {useInputStore} from '../stores/stock';
+import convertToChinese from '../stores/func';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4766848_ljrh2ypfin.js',
