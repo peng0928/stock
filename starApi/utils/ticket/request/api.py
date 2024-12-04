@@ -2,7 +2,7 @@ from PrSpider import Xpath
 import requests
 
 from loguru import logger
-from utils.tools.index import to_yi
+from utils.tools.index import to_yi, to_float_list, merge_md
 from functools import wraps
 
 
@@ -100,7 +100,14 @@ class RequestClient:
             "hy": hy,
             "dp": dp,
             "cid": code,
+            "md": '',
         }
+        md_jg = [json_data.get('f32'), json_data.get('f34'), json_data.get('f36'),
+                 json_data.get('f38'), json_data.get('f40'), json_data.get('f20'),
+                 json_data.get('f18'), json_data.get('f16'), json_data.get('f14'), json_data.get('f12'),
+                 ]
+        md = merge_md(to_float_list(json_data.get('f43')), md_jg)
+        item['md'] = md
         return item
 
     @catch_exceptions
@@ -240,11 +247,29 @@ class RequestClient:
             item.append(item_data)
         return item
 
+    @catch_exceptions
+    def stock_details(self, code):
+        url = "https://push2.eastmoney.com/api/qt/stock/details/get"
+        params = {
+            "fields1": "f1,f2,f3,f4",
+            "fields2": "f51,f52,f53,f54,f55^",
+            "fltt": "2",
+            "cb": "",
+            "pos": "",
+            "secid": code,
+            "ut": "",
+            "wbp2u": "|0|0|0|web",
+            "_": "^"
+        }
+        response = self.session.get(url, params=params)
+        json_data = response.json().get('data').get('details')
+        return json_data
+
 
 def main():
     client = RequestClient()
     stock_data = client.stock_get('002640')
-    # print(stock_data)
+    print(stock_data)
 
 
 if __name__ == '__main__':

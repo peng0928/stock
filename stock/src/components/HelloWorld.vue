@@ -69,8 +69,27 @@
         </div>
       </div>
 
-      <div class="container mx-auto ">
-        <div id="main" class="" style="min-height: 60vh"></div>
+      <div class="container flex">
+        <div id="main" class="w-5/6" style="min-height: 60vh;"></div>
+        <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg font-light text-lg mt-16 h-3/4" :class="borderColor()">
+          <div class="text-center">
+            <span>五档</span>
+          </div>
+          <div v-for="(item, index) in stock.md" :key="index" v-if="stock.md">
+            <div class="flex">
+              <div>{{ item[0] }}</div>
+              <div class="ml-4 mr-4" :class="stockColor(item[1])">{{ item[1] }}</div>
+              <div :class="indexColor(index)">{{ item[2] }}</div>
+            </div>
+            <div v-if="index===4">
+              <div class="flex">
+                <div class="h-1 bg-red-500" :style="calculatePercentage(1)"></div>
+                <div class="h-1 bg-green-500" :style="calculatePercentage()"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </div>
@@ -125,9 +144,51 @@ const chgColor = (chg = 0, v = 0) => {
   const va = chg ? chg : stock.value.chg
   return va < v ? 'text-green-500' : 'text-red-500';
 };
+
+function calculatePercentage(s = 0) {
+  const arrList = stock.value.md;
+  const arr = [];
+  for (let i = 0; i < arrList.length; i++) {
+    arr.push(arrList[i][2]);
+  }
+  const totalSum = arr.reduce((sum, value) => {
+    if (value !== '-') return sum + value;
+    return sum;
+  }, 0);
+
+  // 计算前5个元素的和，忽略'-'
+  const firstHalfSum = arr.slice(0, 5).reduce((sum, value) => {
+    if (value !== '-') return sum + value;
+    return sum;
+  }, 0);
+
+  // 计算后5个元素的和，忽略'-'
+  const secondHalfSum = arr.slice(5).reduce((sum, value) => {
+    if (value !== '-') return sum + value;
+    return sum;
+  }, 0);
+
+  // 计算前5个元素和后5个元素的和的总占比
+  const first = parseInt(firstHalfSum / totalSum * 100);
+  const second = parseInt(secondHalfSum / totalSum * 100);
+  if (s === 0) {
+    return 'width: ' + first + '%'
+
+  } else {
+    return 'width: ' + second + '%'
+  }
+}
+
 const borderColor = (chg = 0, v = 0) => {
   const va = chg ? chg : stock.value.chg
   return va < v ? 'border-green-500' : 'border-red-500';
+};
+const indexColor = (e) => {
+  if (e > 4) {
+    return 'text-red-500'
+  } else {
+    return 'text-green-500'
+  }
 };
 const stockColor = (e, chg = 0, v = 0) => {
   if (e === false) {
