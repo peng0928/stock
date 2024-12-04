@@ -48,18 +48,26 @@ class RequestClient:
         hy = tree.xpath("//ul[@id='tab_list1']/li[@id='bk1']/@data").get()
         dp = tree.xpath("//ul[@id='tab_list1']/li[@id='dp1']/@data").get()
         url = "https://push2.eastmoney.com/api/qt/stock/get"
+        fields = ['f58', 'f734', 'f107', 'f57', 'f43', 'f59', 'f169', 'f301', 'f60', 'f170', 'f152', 'f177', 'f111',
+                  'f46', 'f44', 'f45', 'f47', 'f260', 'f48', 'f261', 'f279', 'f277', 'f278', 'f288', 'f19', 'f17',
+                  'f531', 'f15', 'f13', 'f11', 'f20', 'f18', 'f16', 'f14', 'f12', 'f39', 'f37', 'f35', 'f33', 'f31',
+                  'f40', 'f38', 'f36', 'f34', 'f32', 'f211', 'f212', 'f213', 'f214', 'f215', 'f210', 'f209', 'f208',
+                  'f207', 'f206', 'f161', 'f49', 'f171', 'f50', 'f86', 'f84', 'f85', 'f168', 'f108', 'f116', 'f167',
+                  'f164', 'f162', 'f163', 'f92', 'f71', 'f117', 'f292', 'f51', 'f52', 'f191', 'f192', 'f262', 'f294',
+                  'f295', 'f269', 'f270', 'f256', 'f257', 'f285', 'f286', 'f748', 'f747']
+
+        fields = ','.join(fields)
         params = {
             "fltt": "2",
             "invt": "2",
             "secid": code,
-            "fields": "f57,f58,f107,f43,f169,f170,f171,f47,f48,f60,f46,f44,f45,f168,f50,f162,f177,f117,f167,f116,f168",
+            "fields": fields,
             "ut": "",
             "cb": "",
             "_": ""
         }
         response = self.session.get(url, params=params)
         json_data = response.json()
-        print(json_data)
         json_data = json_data.get('data') or {}
         item = {
             "cha": json_data.get('f169'),  # 涨跌额
@@ -75,6 +83,20 @@ class RequestClient:
             "market_net": json_data.get('f167'),  # 市净
             "code": json_data.get('f57'),  # 股票代码
             "name": json_data.get('f58'),  # 股票名称
+            "hs": f"{json_data.get('f168')}%",  # 换手
+            "lb": json_data.get('f50'),  # 量比
+            "zs": to_yi(json_data.get('f47')),  # 总手
+            "je": to_yi(json_data.get('f48')),  # 金额
+            "wp": to_yi(json_data.get('f49')),  # 外盘
+            "np": to_yi(json_data.get('f161')),  # 内盘
+            "zt": json_data.get('f51'),  # 涨停
+            "dt": json_data.get('f52'),  # 跌停
+            "zuos": json_data.get('f60'),  # 昨收
+            "jk": json_data.get('f71'),  # 今开
+            "zx": json_data.get('f43'),  # 最新
+            "zf": json_data.get('f170'),  # 涨幅
+            "jj": json_data.get('f71'),  # 均价
+            "zd": round(float(json_data.get('f43')) - float(json_data.get('f71')), 2),  # 涨跌
             "hy": hy,
             "dp": dp,
             "cid": code,
@@ -115,6 +137,7 @@ class RequestClient:
                     "min_price": trend_data[4],  # k线最低价
                     "cjl": trend_data[5],  # 成交量
                     "cje": trend_data[6],  # 成交额
+                    "jj": trend_data[7],  # 均价
                     "ratio": f"{ratio}%",
                     "increase": increase,
                     "datetime": trend_data[0][-5:],  # 时间
@@ -220,8 +243,8 @@ class RequestClient:
 
 def main():
     client = RequestClient()
-    stock_data = client.stock_get('002045')
-    print(stock_data)
+    stock_data = client.stock_get('002640')
+    # print(stock_data)
 
 
 if __name__ == '__main__':

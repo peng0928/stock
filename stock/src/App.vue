@@ -8,15 +8,16 @@
           mode="horizontal"
           :style="{ lineHeight: '64px' }"
       >
-        <a-menu-item key="1">home</a-menu-item>
+        <a-menu-item key="1">首页</a-menu-item>
+        <a-menu-item key="2">涨停版</a-menu-item>
 
       </a-menu>
     </a-layout-header>
     <a-layout-content style="padding: 0 50px">
       <a-breadcrumb style="margin: 16px 0">
-        <a-breadcrumb-item>Home</a-breadcrumb-item>
-        <a-breadcrumb-item>List</a-breadcrumb-item>
-        <a-breadcrumb-item>App</a-breadcrumb-item>
+<!--        <a-breadcrumb-item>Home</a-breadcrumb-item>-->
+<!--        <a-breadcrumb-item>List</a-breadcrumb-item>-->
+<!--        <a-breadcrumb-item>App</a-breadcrumb-item>-->
       </a-breadcrumb>
       <div :style="{ background: '#fff', padding: '24px' }" class="min-h-max">
         <router-view/>
@@ -30,5 +31,5 @@
 <script setup>
 import {ref} from 'vue';
 
-const selectedKeys = ref(['2']);
+const selectedKeys = ref(['1']);
 </script>

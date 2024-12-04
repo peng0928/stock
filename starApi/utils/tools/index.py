@@ -1,5 +1,8 @@
 def to_yi(n):
-    n = int(n)
+    try:
+        n = int(n)
+    except:
+        return n
     s = round(n / 100000000, 2)
     if s < 1:
         s = round(n / 10000, 2)

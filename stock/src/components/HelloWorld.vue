@@ -38,7 +38,7 @@
             <p class="ml-3" :class="chgColor(stock.min, stock.now)">低：{{ stock.min }}</p>
           </div>
           <div class="flex">
-            <p class="font-semibold text-4xl ml-3" :class="chgColor()">{{ stock.end }}</p>
+            <p class="font-semibold text-4xl ml-3" :class="chgColor()">{{ (stock.end).toFixed(2) }}</p>
             <icon-font :type="chgIcon()" :style="{fontSize: '35px'}"/>
           </div>
           <div class="text-lg font-medium flex">
@@ -47,18 +47,24 @@
           </div>
         </div>
         <div class="text-left font-light flex text-sm">
-          <div class="w-auto p-4 mx-2 border-2 border-blue-200 rounded-lg">
+          <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg" :class="borderColor()">
+            <div v-for="(item, index) in stockInfo" :key="index" class="flex justify-between">
+              <div class="mr-8 flex flex-1 text-nowrap">
+                <div>{{ item.n1 }}:</div>
+                <div :class="stockColor(item.c1)">{{ stock[item.k1] }}</div>
+              </div>
+              <div class="flex flex-1 text-nowrap">
+                <div>{{ item.n2 }}:</div>
+                <div :class="stockColor(item.c2)">{{ stock[item.k2] }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="w-auto p-4 mx-2 border-2 border-blue-200 rounded-lg" :class="borderColor()">
             <p class="ml-2 pt-1 my-1">成交量：{{ stock.turnover }}</p>
             <p class="ml-2 pt-1 my-1">总市值：{{ stock.market }}</p>
             <p class="ml-2 pt-1 my-1">流通市值：{{ stock.float_market }}</p>
             <p class="ml-2 pt-1 my-1">市盈：{{ stock.P_E }}</p>
             <p class="ml-2 pt-1 my-1">市净：{{ stock.market_net }}</p>
-          </div>
-          <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg">
-            <div v-for="(item, index) in stockInfo" :key="index" class="flex justify-between my-1">
-              <div>{{ item.n1 }}:11</div>
-              <div class="pl-10">{{ item.n2 }}:22</div>
-            </div>
           </div>
         </div>
       </div>
@@ -78,11 +84,22 @@
 import {ref, computed, onMounted} from 'vue'
 import {createFromIconfontCN} from '@ant-design/icons-vue';
 import * as echarts from 'echarts';
+import {useInputStore} from '../stores/stock';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4766848_ljrh2ypfin.js',
 });
-const stockName = ref('002640')
+const inputStore = useInputStore();
+
+// 将 store 中的值映射为响应式数据
+const stockName = computed({
+  get() {
+    return inputStore.name;
+  },
+  set(value) {
+    inputStore.updateInputValue(value);
+  }
+});
 const state = ref({
   check: false
 })
@@ -92,19 +109,36 @@ const stock = ref({
   chg: 0
 })
 const stockInfo = ref([
-  {n1: "最新", k1: "zx", n2: "均价", k2: "jj"},
-  {n1: "涨幅", k1: "zf", n2: "涨跌", k2: 'zd'},
-  {n1: "总手", k1: "zs", n2: "金额", k2: 'je'},
-  {n1: "换手", k1: "hs", n2: "量比", k2: 'lb'},
-  {n1: "最高", k1: "zg", n2: "最低", k2: 'zdi'},
-  {n1: "今开", k1: "jk", n2: "昨收", k2: 'zs'},
-  {n1: "涨停", k1: "zt", n2: "跌停", k2: 'dt'},
-  {n1: "外盘", k1: "wp", n2: "内盘", k2: 'np'},
+  {n1: "最新", k1: "zx", n2: "均价", k2: "jj", c1: true, c2: true},
+  {n1: "涨幅", k1: "zf", n2: "涨跌", k2: 'zd', c1: true, c2: true},
+  {n1: "总手", k1: "zs", n2: "金额", k2: 'je', c1: false, c2: false},
+  {n1: "换手", k1: "hs", n2: "量比", k2: 'lb', c1: false, c2: false},
+  {n1: "最高", k1: "max", n2: "最低", k2: 'min', c1: true, c2: false},
+  {n1: "今开", k1: "jk", n2: "昨收", k2: 'zuos', c1: true, c2: false},
+  {n1: "涨停", k1: "zt", n2: "跌停", k2: 'dt', c1: 'r', c2: 'g'},
+  {n1: "外盘", k1: "wp", n2: "内盘", k2: 'np', c1: 'r', c2: 'g'},
 
 ]);
 const timer = ref([]);
 
 const chgColor = (chg = 0, v = 0) => {
+  const va = chg ? chg : stock.value.chg
+  return va < v ? 'text-green-500' : 'text-red-500';
+};
+const borderColor = (chg = 0, v = 0) => {
+  const va = chg ? chg : stock.value.chg
+  return va < v ? 'border-green-500' : 'border-red-500';
+};
+const stockColor = (e, chg = 0, v = 0) => {
+  if (e === false) {
+    return ''
+  }
+  if (e === 'r') {
+    return 'text-red-500'
+  }
+  if (e === 'g') {
+    return 'text-green-500'
+  }
   const va = chg ? chg : stock.value.chg
   return va < v ? 'text-green-500' : 'text-red-500';
 };
@@ -240,6 +274,7 @@ const initxData = (klineData) => {
 };
 const splitData = (jsonData) => {
   const hourData = [];
+  const jdata = [];
   for (let i = 0; i < jsonData.length; i++) {
     hourData.push([
       i,
@@ -250,8 +285,17 @@ const splitData = (jsonData) => {
       jsonData[i].amount,
       jsonData[i].datetime
     ]);
+    jdata.push([
+      i,
+      jsonData[i].jj,
+    ]);
   }
-  return hourData;
+  for (let i = 0; i < 242 - hourData.length; i++) {
+    hourData.push([hourData.length + i, null, null, null, null, null, null])
+    jdata.push([jdata.length + i, null, null, null, null, null, null])
+  }
+
+  return {data: hourData, jdata: jdata};
 }
 const initCulomn = (klineData) => {
   const culomnColor = [];
@@ -263,14 +307,19 @@ const initCulomn = (klineData) => {
     culomnValue[i] = [i, klineData[i].cjl, culomnColor[i], klineData[i].datetime
     ];
   }
+  for (let i = 0; i < 242 - culomnValue.length; i++) {
+    culomnValue.push([culomnValue.length + i, null, null, null, null, null, null])
+  }
   return {color: culomnColor, data: culomnValue}
 }
 const EchartMain = (title, data) => {
   const chartDom = document.getElementById('main');
   const myChart = echarts.init(chartDom);
   var option;
-  const xdata = initxData(data)
-  const hourDa = splitData(data)
+  const xdata = initxData(data);
+  const result = splitData(data);
+  const hourDa = result.data;
+  const jdata = result.jdata;
   const culomn = initCulomn(data)
   const upcolor = "#FF0000"; //增长颜色
   const downColor = "#008000"; // 下跌颜色
@@ -281,10 +330,10 @@ const EchartMain = (title, data) => {
         type: "category",
         data: xdata,
         boundaryGap: false,
-        axisLine: {onZero: false},
         splitLine: {show: false},
         min: "dataMin",
-        max: "dataMax"
+        max: "dataMax",
+        axisLine: {onZero: false},
       },
       // 柱状图
       {
@@ -305,7 +354,8 @@ const EchartMain = (title, data) => {
         scale: true,
         splitArea: {
           show: true
-        }
+        },
+
       },
       {
         scale: true,
@@ -325,7 +375,16 @@ const EchartMain = (title, data) => {
         lineStyle: {
           width: 1,
           color: 'black'
-        }
+        },
+      },
+      {
+        type: "line",
+        data: jdata,
+        symbol: "none",//无标记图案
+        lineStyle: {
+          width: 1,
+          color: '#d4a12f'
+        },
       },
       {
         name: "Volume",
@@ -344,8 +403,8 @@ const EchartMain = (title, data) => {
       {
         left: "10%",
         right: "10%",
-        top: "65%",
-        height: "18%"
+        top: "70%",
+        height: "15%"
       }
     ],
     tooltip: {
@@ -382,7 +441,7 @@ const EchartMain = (title, data) => {
     visualMap: {
       type: "piecewise",
       show: false, //不展示map，只应用对应颜色划分逻辑
-      seriesIndex: 1, //指定取哪个系列的数据
+      seriesIndex: 2, //指定取哪个系列的数据
       dimension: 2,
       // 定义每一段的颜色
       pieces: [
