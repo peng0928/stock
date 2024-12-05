@@ -55,25 +55,19 @@
             <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
           </div>
         </div>
-        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg  w-2/5" :class="borderColor()">
-          <div class="p-4 mx-2 w-3/6">
-            <div v-for="(item, index) in stockInfo" :key="index" class="text-nowrap flex flex-row relative">
-              <div class="mr-8 flex pr-16 hover:font-bold">
+        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-80"
+             :class="borderColor()">
+          <div class="p-3 mx-2 container w-5/6 mx-auto">
+            <div v-for="(item, index) in stockInfo" :key="index" class="text-nowrap flex justify-between">
+              <div class="flex hover:font-bold w-1/2">
                 <div>{{ item.n1 }}:</div>
                 <div :class="stockColor(item.c1)" class="pl-1">{{ stock[item.k1] }}</div>
               </div>
-              <div class="flex absolute right-6 text-left w-10 hover:font-bold">
+              <div class="flex text-left w-1/3 hover:font-bold">
                 <div>{{ item.n2 }}:</div>
                 <div :class="stockColor(item.c2)" class="pl-1">{{ stock[item.k2] }}</div>
               </div>
             </div>
-          </div>
-          <div class="p-4 mx-2 text-nowrap w-1/5">
-            <p class="hover:font-bold">成交量: {{ stock.turnover }}</p>
-            <p class="hover:font-bold">总市值: {{ stock.market }}</p>
-            <p class="hover:font-bold">流通市值: {{ stock.float_market }}</p>
-            <p class="hover:font-bold">市盈: {{ stock.P_E }}</p>
-            <p class="hover:font-bold">市净: {{ stock.market_net }}</p>
           </div>
         </div>
       </div>
@@ -87,9 +81,9 @@
           </div>
           <div v-for="(item, index) in stock.md" :key="index" v-if="stock.md">
             <div class="flex whitespace-nowrap hover:font-bold">
-              <div>{{ item[0] }}</div>
-              <div class="ml-4 mr-4" :class="stockColor(item[1])">{{ item[1] }}</div>
-              <div :class="indexColor(index)">{{ convertToChinese(item[2]) }}</div>
+              <div class="w-1/3">{{ item[0] }}</div>
+              <div class="ml-4 mr-4 w-1/3" :class="stockColor(item[1])">{{ item[1] }}</div>
+              <div :class="indexColor(index)" class="w-1/3">{{ convertToChinese(item[2]) }}</div>
             </div>
             <div v-if="index===4">
               <div class="flex">
@@ -147,6 +141,8 @@ const stockInfo = ref([
   {n1: "今开", k1: "jk", n2: "昨收", k2: 'zuos', c1: true, c2: 'blue'},
   {n1: "涨停", k1: "zt", n2: "跌停", k2: 'dt', c1: 'r', c2: 'g'},
   {n1: "外盘", k1: "wp", n2: "内盘", k2: 'np', c1: 'r', c2: 'g'},
+  {n1: "流通市值", k1: "float_market", n2: "总市值", k2: 'market', c1: true, c2: true},
+  {n1: "市盈", k1: "P_E", n2: "市净", k2: 'market_net', c1: true, c2: true},
 
 ]);
 const timer = ref([]);
