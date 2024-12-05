@@ -266,12 +266,14 @@ class RequestClient:
         }
         response = self.session.get(url, params=params)
         json_data = response.json().get('data').get('details')
+        if json_data:
+            json_data = [i.split(',') for i in json_data]
         return json_data
 
 
 def main():
     client = RequestClient()
-    stock_data = client.stock_get('002640')
+    stock_data = client.stock_details('0.002131')
     print(stock_data)
 
 

@@ -55,7 +55,7 @@
             <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
           </div>
         </div>
-        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-80"
+        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-72"
              :class="borderColor()">
           <div class="p-3 mx-2 container w-5/6 mx-auto">
             <div v-for="(item, index) in stockInfo" :key="index" class="text-nowrap flex justify-between">
@@ -82,7 +82,7 @@
           <div v-for="(item, index) in stock.md" :key="index" v-if="stock.md">
             <div class="flex whitespace-nowrap hover:font-bold">
               <div class="w-1/3">{{ item[0] }}</div>
-              <div class="ml-4 mr-4 w-1/3" :class="stockColor(item[1])">{{ item[1] }}</div>
+              <div class="ml-4 mr-4 w-1/3" :class="stockColor('',item[1])">{{ item[1] }}</div>
               <div :class="indexColor(index)" class="w-1/3">{{ convertToChinese(item[2]) }}</div>
             </div>
             <div v-if="index===4">
@@ -92,7 +92,33 @@
               </div>
             </div>
           </div>
-
+          <div v-if="stockDetails.length">
+            <div class="pt-3 pb-1">
+              <div class="flex flex-wrap sm:grid sm:grid-cols-4  bg-green-200 font-bold">
+                <div class="flex-grow sm:w-auto text-left">时间</div>
+                <div class="flex-grow sm:w-auto text-right">成交价</div>
+                <div class="flex-grow sm:w-auto text-right">手数</div>
+                <div class="flex-grow sm:w-auto text-right">笔数</div>
+              </div>
+            </div>
+            <div v-for="(item, index) in stockDetails.slice(-5).reverse()" :key="index">
+              <div class="flex flex-wrap sm:grid sm:grid-cols-4">
+                <div class="flex-grow sm:w-auto font-semibold text-left  hover:font-bold">{{ item[0] }}</div>
+                <div class="flex-grow sm:w-auto font-semibold text-right  hover:font-bold"
+                     :class="stockColor('',item[1])">{{ item[1] }}
+                </div>
+                <div class="flex-grow sm:w-auto font-semibold text-right text-red-500  hover:font-bold">{{
+                    item[2]
+                  }}
+                </div>
+                <div class="flex-grow sm:w-auto font-semibold text-right text-red-500  hover:font-bold">{{
+                    item[3]
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="container text-center pt-1"><a>查看更多</a></div>
+          </div>
         </div>
       </div>
     </div>
@@ -128,6 +154,7 @@ const state = ref({
   check: false
 })
 const stockPlate = ref([])
+const stockDetails = ref([])
 const stockPlateTest = ref([])
 const stock = ref({
   chg: 0
@@ -141,7 +168,7 @@ const stockInfo = ref([
   {n1: "今开", k1: "jk", n2: "昨收", k2: 'zuos', c1: true, c2: 'blue'},
   {n1: "涨停", k1: "zt", n2: "跌停", k2: 'dt', c1: 'r', c2: 'g'},
   {n1: "外盘", k1: "wp", n2: "内盘", k2: 'np', c1: 'r', c2: 'g'},
-  {n1: "流通市值", k1: "float_market", n2: "总市值", k2: 'market', c1: true, c2: true},
+  {n1: "流通市值", k1: "float_market", n2: "市值", k2: 'market', c1: true, c2: true},
   {n1: "市盈", k1: "P_E", n2: "市净", k2: 'market_net', c1: true, c2: true},
 
 ]);
@@ -219,7 +246,9 @@ const stockColor = (e, chg = 0, v = 0) => {
   if (e === 'y') {
     return 'text-purple-500'
   }
-  const va = chg ? chg : stock.value.chg
+  const va = chg ? chg : stock.value.zx
+  v = v ? v : stock.value.zuos
+  console.log(va, v)
   return va < v ? 'text-green-500' : 'text-red-500';
 };
 const chgIcon = () => {
@@ -249,6 +278,7 @@ const StockGet = async (e = true) => {
     stock.value = query;
     if (e) {
       StockTrendData();
+      StockDetails();
       StockTrend();
     }
   } catch (error) {
@@ -307,6 +337,25 @@ const StockTrendData = async () => {
     console.log('There was an error!', error);
   }
 };
+const StockDetails = async () => {
+  const dp = stock.value.cid;
+  try {
+    const response = await fetch('/api/stock/details', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // 设置请求体格式为 JSON
+      },
+      body: JSON.stringify({
+        code: dp,
+      }),
+    });
+    // 解析响应数据
+    const query = await response.json();
+    stockDetails.value = query;
+  } catch (error) {
+    console.log('There was an error!', error);
+  }
+};
 const doFunc = () => {
   const timeList = timer.value;
   if (stock.value.name) {
@@ -323,6 +372,10 @@ const doFunc = () => {
       StockTrendData()
     }, 1000);
     timer.value.push(cid);
+    const did = setInterval(() => {
+      StockDetails()
+    }, 1000);
+    timer.value.push(did);
     const pid = setInterval(() => {
       StockTrend()
     }, 10000);
