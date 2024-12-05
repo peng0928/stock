@@ -74,7 +74,7 @@
 
       <div class="container flex">
         <div id="main" class="w-5/6" style="min-height: 60vh;"></div>
-        <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg font-light text-sm mt-16 h-4/5 w-1/6"
+        <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg font-light text-sm mt-16 h-4/5 w-1/5"
              :class="borderColor()">
           <div class="text-center">
             <span>五档</span>
