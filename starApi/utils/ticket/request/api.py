@@ -12,9 +12,7 @@ def catch_exceptions(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            print(e)
             logger.warning(f"catch_exceptions => {e}")
-            raise e
             return {"status": False, "msg": "服务暂不可用"}
 
     return wrapper
@@ -96,12 +94,17 @@ class RequestClient:
             "zx": json_data.get('f43'),  # 最新
             "zf": json_data.get('f170'),  # 涨幅
             "jj": json_data.get('f71'),  # 均价
-            "zd": round(float(json_data.get('f43')) - float(json_data.get('f71')), 2),  # 涨跌
+            "zd": "",  # 涨跌
             "hy": hy,
             "dp": dp,
             "cid": code,
             "md": '',
         }
+        try:
+            zd = round(float(json_data.get('f43')) - float(json_data.get('f71')), 2)
+        except:
+            zd = '-'
+        item['zd'] = zd
         md_jg = [json_data.get('f32'), json_data.get('f34'), json_data.get('f36'),
                  json_data.get('f38'), json_data.get('f40'), json_data.get('f20'),
                  json_data.get('f18'), json_data.get('f16'), json_data.get('f14'), json_data.get('f12'),

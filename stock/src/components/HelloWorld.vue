@@ -31,11 +31,20 @@
           <div class="flex">
             <p class="mr-2">{{ stock.name }}</p>
             <p>{{ stock.code }}</p>
+            <div class="ml-3 flex items-center text-blue-500">
+              <div class="pb-1">
+                <icon-font type="icon-shijian" :style="{fontSize: '25px'}"/>
+              </div>
+              <div class="pl-1">
+                {{ currentTime }}
+              </div>
+            </div>
           </div>
-          <div class="text-lg font-medium flex">
-            <p class="mr-2">开：{{ stock.now }}</p>
-            <p class="ml-3" :class="chgColor(stock.max, stock.now)">高：{{ stock.max }}</p>
+          <div class="text-lg font-light flex">
+            <p class="mr-2" :class="chgColor(stock.max, stock.zuos)">开：{{ stock.now }}</p>
+            <p class="ml-3" :class="chgColor(stock.max, stock.zuos)">高：{{ stock.max }}</p>
             <p class="ml-3" :class="chgColor(stock.min, stock.now)">低：{{ stock.min }}</p>
+            <p class="ml-3 text-yellow-600">均价：{{ stock.jj }}</p>
           </div>
           <div class="flex">
             <p class="font-semibold text-4xl ml-3" :class="chgColor()">{{ (stock.end).toFixed(2) }}</p>
@@ -46,37 +55,38 @@
             <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
           </div>
         </div>
-        <div class="text-left font-light flex text-sm">
-          <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg" :class="borderColor()">
-            <div v-for="(item, index) in stockInfo" :key="index" class="flex justify-between">
-              <div class="mr-8 flex flex-1 text-nowrap">
+        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg  w-2/5" :class="borderColor()">
+          <div class="p-4 mx-2 w-3/6">
+            <div v-for="(item, index) in stockInfo" :key="index" class="text-nowrap flex flex-row relative">
+              <div class="mr-8 flex pr-16 hover:font-bold">
                 <div>{{ item.n1 }}:</div>
-                <div :class="stockColor(item.c1)">{{ stock[item.k1] }}</div>
+                <div :class="stockColor(item.c1)" class="pl-1">{{ stock[item.k1] }}</div>
               </div>
-              <div class="flex flex-1 text-nowrap">
+              <div class="flex absolute right-6 text-left w-10 hover:font-bold">
                 <div>{{ item.n2 }}:</div>
-                <div :class="stockColor(item.c2)">{{ stock[item.k2] }}</div>
+                <div :class="stockColor(item.c2)" class="pl-1">{{ stock[item.k2] }}</div>
               </div>
             </div>
           </div>
-          <div class="w-auto p-4 mx-2 border-2 border-blue-200 rounded-lg" :class="borderColor()">
-            <p class="ml-2 pt-1 my-1">成交量：{{ stock.turnover }}</p>
-            <p class="ml-2 pt-1 my-1">总市值：{{ stock.market }}</p>
-            <p class="ml-2 pt-1 my-1">流通市值：{{ stock.float_market }}</p>
-            <p class="ml-2 pt-1 my-1">市盈：{{ stock.P_E }}</p>
-            <p class="ml-2 pt-1 my-1">市净：{{ stock.market_net }}</p>
+          <div class="p-4 mx-2 text-nowrap w-1/5">
+            <p class="hover:font-bold">成交量: {{ stock.turnover }}</p>
+            <p class="hover:font-bold">总市值: {{ stock.market }}</p>
+            <p class="hover:font-bold">流通市值: {{ stock.float_market }}</p>
+            <p class="hover:font-bold">市盈: {{ stock.P_E }}</p>
+            <p class="hover:font-bold">市净: {{ stock.market_net }}</p>
           </div>
         </div>
       </div>
 
       <div class="container flex">
         <div id="main" class="w-5/6" style="min-height: 60vh;"></div>
-        <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg font-light text-lg mt-16 h-3/4" :class="borderColor()">
+        <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg font-light text-sm mt-16 h-4/5 w-1/6"
+             :class="borderColor()">
           <div class="text-center">
             <span>五档</span>
           </div>
           <div v-for="(item, index) in stock.md" :key="index" v-if="stock.md">
-            <div class="flex">
+            <div class="flex whitespace-nowrap hover:font-bold">
               <div>{{ item[0] }}</div>
               <div class="ml-4 mr-4" :class="stockColor(item[1])">{{ item[1] }}</div>
               <div :class="indexColor(index)">{{ convertToChinese(item[2]) }}</div>
@@ -93,21 +103,21 @@
       </div>
     </div>
   </div>
-  <div v-else class="flex container mx-auto items-center justify-center pt-10">
+  <div v-else class="flex container mx-auto items-center justify-center pt-10 ">
     <icon-font type="icon-zanwuxinxi" :style="{fontSize: '350px'}"/>
   </div>
 </template>
 
 
 <script setup>
-import {ref, computed, onMounted} from 'vue'
+import {ref, computed, onMounted, onBeforeUnmount} from 'vue'
 import {createFromIconfontCN} from '@ant-design/icons-vue';
 import * as echarts from 'echarts';
 import {useInputStore} from '../stores/stock';
 import convertToChinese from '../stores/func';
 
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_4766848_ljrh2ypfin.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_4766848_zfmsqvszl5h.js',
 });
 const inputStore = useInputStore();
 
@@ -132,14 +142,20 @@ const stockInfo = ref([
   {n1: "最新", k1: "zx", n2: "均价", k2: "jj", c1: true, c2: true},
   {n1: "涨幅", k1: "zf", n2: "涨跌", k2: 'zd', c1: true, c2: true},
   {n1: "总手", k1: "zs", n2: "金额", k2: 'je', c1: false, c2: false},
-  {n1: "换手", k1: "hs", n2: "量比", k2: 'lb', c1: false, c2: false},
+  {n1: "换手", k1: "hs", n2: "量比", k2: 'lb', c1: 'y', c2: 'r'},
   {n1: "最高", k1: "max", n2: "最低", k2: 'min', c1: true, c2: false},
-  {n1: "今开", k1: "jk", n2: "昨收", k2: 'zuos', c1: true, c2: false},
+  {n1: "今开", k1: "jk", n2: "昨收", k2: 'zuos', c1: true, c2: 'blue'},
   {n1: "涨停", k1: "zt", n2: "跌停", k2: 'dt', c1: 'r', c2: 'g'},
   {n1: "外盘", k1: "wp", n2: "内盘", k2: 'np', c1: 'r', c2: 'g'},
 
 ]);
 const timer = ref([]);
+const currentTime = ref(new Date().toLocaleTimeString());
+
+const updateTime = () => {
+  currentTime.value = new Date().toLocaleTimeString();
+};
+setInterval(updateTime, 100);
 
 const chgColor = (chg = 0, v = 0) => {
   const va = chg ? chg : stock.value.chg
@@ -200,6 +216,12 @@ const stockColor = (e, chg = 0, v = 0) => {
   }
   if (e === 'g') {
     return 'text-green-500'
+  }
+  if (e === 'blue') {
+    return 'text-blue-500'
+  }
+  if (e === 'y') {
+    return 'text-purple-500'
   }
   const va = chg ? chg : stock.value.chg
   return va < v ? 'text-green-500' : 'text-red-500';
@@ -345,7 +367,8 @@ const splitData = (jsonData) => {
       jsonData[i].cjl,
       jsonData[i].ratio,
       jsonData[i].amount,
-      jsonData[i].datetime
+      jsonData[i].datetime,
+      jsonData[i].jj,
     ]);
     jdata.push([
       i,
@@ -386,7 +409,7 @@ const EchartMain = (title, data) => {
   const upcolor = "#FF0000"; //增长颜色
   const downColor = "#008000"; // 下跌颜色
   option = {
-    title: {text: title + "-分时图"},
+    title: {text: "分时"},
     xAxis: [
       {
         type: "category",
@@ -493,9 +516,10 @@ const EchartMain = (title, data) => {
           return [
             "时间: " + param.data[6] + '<hr size=1 >',
             "价格: " + param.data[1] + "<br/>",
+            "均价: " + param.data[7] + "<br/>",
             "涨跌额: " + param.data[2] + "<br/>",
             "成交量: " + formatNumber(param.data[3]) + "<br/>",
-            "涨跌幅: " + param.data[4] + "<br/>"
+            "涨跌幅: " + param.data[4] + "<br/>",
           ].join("");
         }
       }
@@ -522,6 +546,6 @@ const EchartMain = (title, data) => {
 
 };
 onMounted(() => {
-
 })
+
 </script>
