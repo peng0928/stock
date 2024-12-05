@@ -4,8 +4,6 @@ from fastapi import *
 from fastapi.routing import APIRouter
 from fastapi.responses import ORJSONResponse, JSONResponse
 from fastapi.responses import StreamingResponse
-from typing import List
-import asyncio
 
 from utils.ticket.request.api import *
 from views.stock.model.index import *
@@ -51,8 +49,11 @@ async def stock_trend_data(request: Request, item: StockItem):
     return JSONResponse(status_code=200, content=data)
 
 
-# 用于保存所有的客户端连接
-clients: List[asyncio.Queue] = []
+@router.post("/stock/details")
+async def stock_trend_data(request: Request, item: StockItem):
+    code = item.code
+    data = ReqClient.stock_details(code=code)
+    return JSONResponse(status_code=200, content=data)
 
 
 # SSE生成器，用于向客户端发送事件流
