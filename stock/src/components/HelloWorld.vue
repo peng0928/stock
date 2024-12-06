@@ -47,7 +47,7 @@
             <p class="ml-3 text-yellow-600">均价：{{ stock.jj }}</p>
           </div>
           <div class="flex">
-            <p class="font-semibold text-4xl ml-3" :class="chgColor()">{{ (stock.end).toFixed(2) }}</p>
+            <p class="font-semibold text-4xl ml-3" :class="chgColor()">{{ try_toFixed(stock.end) }}</p>
             <icon-font :type="chgIcon()" :style="{fontSize: '35px'}"/>
           </div>
           <div class="text-lg font-medium flex">
@@ -72,52 +72,92 @@
         </div>
       </div>
 
-      <div class="container flex">
-        <div id="main" class="w-5/6" style="min-height: 60vh;"></div>
-        <div class="p-4 mx-2 border-2 border-blue-200 rounded-lg font-light text-sm mt-16 h-4/5 w-1/5"
-             :class="borderColor()">
-          <div class="text-center">
-            <span>五档</span>
+      <div class="container flex h-3/5">
+        <div id="main" class="w-full" style="min-height: 60vh;">
+          <div>
+            <div class="mx-auto mt-5 w-full max-w-sm rounded-md  p-4" v-if="echartsDataFlags">
+              <div class="animate-pulse space-x-4 w-full">
+                <div class="grid w-full">
+                  <div class="flex">
+                    <div class="rounded-full bg-slate-200"></div>
+                    <div class="ms-4 w-full space-y-6">
+                      <div class="h-2 rounded bg-slate-200"></div>
+                      <div class="space-y-3">
+                        <div class="grid grid-cols-3 gap-4">
+                          <div class="col-span-2 h-2 rounded bg-slate-200"></div>
+                          <div class="col-span-1 h-2 rounded bg-slate-200"></div>
+                        </div>
+                        <div class="h-2 rounded bg-slate-200"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-5 space-y-6 py-1">
+                    <div class="h-2 rounded bg-slate-200"></div>
+                    <div class="space-y-3">
+                      <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-2 h-2 rounded bg-slate-200"></div>
+                        <div class="col-span-1 h-2 rounded bg-slate-200"></div>
+                      </div>
+                      <div class="h-2 rounded bg-slate-200"></div>
+                    </div>
+                    <div class="h-2 rounded bg-slate-200"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div v-for="(item, index) in stock.md" :key="index" v-if="stock.md">
-            <div class="flex whitespace-nowrap hover:font-bold">
-              <div class="w-1/3">{{ item[0] }}</div>
-              <div class="ml-4 mr-4 w-1/3" :class="stockColor('',item[1])">{{ item[1] }}</div>
-              <div :class="indexColor(index)" class="w-1/3">{{ convertToChinese(item[2]) }}</div>
-            </div>
-            <div v-if="index===4">
-              <div class="flex">
-                <div class="h-1 bg-red-500" :style="calculatePercentage(1)"></div>
-                <div class="h-1 bg-green-500" :style="calculatePercentage()"></div>
+        </div>
+        <div class="w-1/4 pt-3">
+          <div v-if="stock.md">
+            <div class="p-2 mx-2 border-2 border-blue-200 rounded-lg font-light text-xs h-2/5"
+                 :class="borderColor()">
+              <div class="text-center">
+                <span>五档</span>
+              </div>
+              <div v-for="(item, index) in stock.md" :key="index" v-if="stock.md">
+                <div class="flex whitespace-nowrap hover:font-bold">
+                  <div class="w-1/3">{{ item[0] }}</div>
+                  <div class="ml-4 mr-4 w-1/3" :class="stockColor('',item[1])">{{ item[1] }}</div>
+                  <div :class="indexColor(index)" class="w-1/3">{{ convertToChinese(item[2]) }}</div>
+                </div>
+                <div v-if="index===4">
+                  <div class="flex">
+                    <div class="h-1 bg-red-500" :style="calculatePercentage(1)"></div>
+                    <div class="h-1 bg-green-500" :style="calculatePercentage()"></div>
+                  </div>
+                </div>
+              </div>
+              <div v-if="stockDetails.length">
+                <div class="pt-3 pb-1">
+                  <div class="flex flex-wrap sm:grid sm:grid-cols-4  bg-green-200 font-bold">
+                    <div class="flex-grow sm:w-auto text-left">时间</div>
+                    <div class="flex-grow sm:w-auto text-right">成交价</div>
+                    <div class="flex-grow sm:w-auto text-right">手数</div>
+                    <div class="flex-grow sm:w-auto text-right">笔数</div>
+                  </div>
+                </div>
+                <div v-for="(item, index) in stockDetails.slice(-5).reverse()" :key="index">
+                  <div class="flex flex-wrap sm:grid sm:grid-cols-4">
+                    <div class="flex-grow sm:w-auto font-light text-left  hover:font-bold">{{ item[0] }}</div>
+                    <div class="flex-grow sm:w-auto font-light text-right  hover:font-bold"
+                         :class="stockColor('',item[1])">{{ item[1] }}
+                    </div>
+                    <div class="flex-grow sm:w-auto font-light text-right text-red-500  hover:font-bold">{{
+                        item[2]
+                      }}
+                    </div>
+                    <div class="flex-grow sm:w-auto font-light text-right text-red-500  hover:font-bold">{{
+                        item[3]
+                      }}
+                    </div>
+                  </div>
+                </div>
+                <div class="container text-center pt-1"><a>查看更多</a></div>
               </div>
             </div>
           </div>
-          <div v-if="stockDetails.length">
-            <div class="pt-3 pb-1">
-              <div class="flex flex-wrap sm:grid sm:grid-cols-4  bg-green-200 font-bold">
-                <div class="flex-grow sm:w-auto text-left">时间</div>
-                <div class="flex-grow sm:w-auto text-right">成交价</div>
-                <div class="flex-grow sm:w-auto text-right">手数</div>
-                <div class="flex-grow sm:w-auto text-right">笔数</div>
-              </div>
-            </div>
-            <div v-for="(item, index) in stockDetails.slice(-5).reverse()" :key="index">
-              <div class="flex flex-wrap sm:grid sm:grid-cols-4">
-                <div class="flex-grow sm:w-auto font-semibold text-left  hover:font-bold">{{ item[0] }}</div>
-                <div class="flex-grow sm:w-auto font-semibold text-right  hover:font-bold"
-                     :class="stockColor('',item[1])">{{ item[1] }}
-                </div>
-                <div class="flex-grow sm:w-auto font-semibold text-right text-red-500  hover:font-bold">{{
-                    item[2]
-                  }}
-                </div>
-                <div class="flex-grow sm:w-auto font-semibold text-right text-red-500  hover:font-bold">{{
-                    item[3]
-                  }}
-                </div>
-              </div>
-            </div>
-            <div class="container text-center pt-1"><a>查看更多</a></div>
+          <div v-else>
+            <a-skeleton/>
           </div>
         </div>
       </div>
@@ -134,8 +174,10 @@ import {ref, computed, onMounted, onBeforeUnmount} from 'vue'
 import {createFromIconfontCN} from '@ant-design/icons-vue';
 import * as echarts from 'echarts';
 import {useInputStore} from '../stores/stock';
-import convertToChinese from '../stores/func';
+import func from '../stores/func';
 
+const convertToChinese = func.convertToChinese;
+const try_toFixed = func.try_toFixed;
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4766848_zfmsqvszl5h.js',
 });
@@ -154,6 +196,7 @@ const state = ref({
   check: false
 })
 const stockPlate = ref([])
+const echartsDataFlags = ref(false)
 const stockDetails = ref([])
 const stockPlateTest = ref([])
 const stock = ref({
@@ -248,7 +291,6 @@ const stockColor = (e, chg = 0, v = 0) => {
   }
   const va = chg ? chg : stock.value.zx
   v = v ? v : stock.value.zuos
-  console.log(va, v)
   return va < v ? 'text-green-500' : 'text-red-500';
 };
 const chgIcon = () => {
@@ -256,7 +298,7 @@ const chgIcon = () => {
 };
 const chgBgColor = (chg = 0) => {
   const va = chg ? chg : stock.value.chg;
-  return va < 0 ? ' bg-green-100 hover:bg-green-200' : ' bg-red-100 hover:bg-red-200';
+  return va < 0 ? 'bg-green-100 hover:bg-green-200' : ' bg-red-100 hover:bg-red-200';
 };
 const Stock = async () => {
   StockGet();
@@ -332,6 +374,10 @@ const StockTrendData = async () => {
     });
     // 解析响应数据
     const query = await response.json();
+    if (query.trends.length > 0) {
+      echartsDataFlags.value = true;
+    }
+    console.log('echartsDataFlags', echartsDataFlags.value, query.trends)
     EchartMain(title, query.trends)
   } catch (error) {
     console.log('There was an error!', error);

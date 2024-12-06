@@ -16,4 +16,12 @@ function convertToChinese(numStr) {
     }
 }
 
-export default convertToChinese;
+function try_toFixed(e) {
+    try {
+        return e.toFixed(2)
+    } catch (err) {
+        return e
+    }
+}
+
+export default {convertToChinese, try_toFixed};

@@ -12,7 +12,7 @@ def catch_exceptions(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            logger.warning(f"catch_exceptions => {e}")
+            logger.exception(f"catch_exceptions => {e}")
             return {"status": False, "msg": "服务暂不可用"}
 
     return wrapper
@@ -109,8 +109,11 @@ class RequestClient:
                  json_data.get('f38'), json_data.get('f40'), json_data.get('f20'),
                  json_data.get('f18'), json_data.get('f16'), json_data.get('f14'), json_data.get('f12'),
                  ]
-        md = merge_md(to_float_list(json_data.get('f43')), md_jg)
-        item['md'] = md
+        try:
+            md = merge_md(to_float_list(json_data.get('f43')), md_jg)
+            item['md'] = md
+        except:
+            item['md'] = ''
         return item
 
     @catch_exceptions
