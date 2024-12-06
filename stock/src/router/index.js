@@ -11,10 +11,18 @@ const routes = [
     },
     {
         path: '/stock',
-        name: 'Home',
+        name: 'stock',
         component: () => import('../components/stockIndex.vue'),
         meta: {
             title: '个股'
+        },
+    },
+    {
+        path: '/plate',
+        name: 'plate',
+        component: () => import('../components/plateIndex.vue'),
+        meta: {
+            title: '板块'
         },
     }
 ];

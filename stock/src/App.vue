@@ -15,20 +15,18 @@
           <a-menu-item key="2">
             <router-link to="/stock">个股</router-link>
           </a-menu-item>
-          <a-menu-item key="3">涨停版</a-menu-item>
+          <a-menu-item key="3">
+            <router-link to="/plate">板块</router-link>
+          </a-menu-item>
+          <a-menu-item key="4">涨停版</a-menu-item>
         </a-menu>
         <div class="text-right text-white flex">
-          <div class="text-red-500">上证：{{stockZsData.shz}}</div>
-          <div class="pl-5">深证: {{stockZsData.sz}}</div>
+          <div class="text-red-500">上证：{{ stockZsData.shz }}</div>
+          <div class="pl-5">深证: {{ stockZsData.sz }}</div>
         </div>
       </div>
     </a-layout-header>
-    <a-layout-content style="padding: 0 50px">
-      <a-breadcrumb style="margin: 16px 0">
-        <!--        <a-breadcrumb-item>Home</a-breadcrumb-item>-->
-        <!--        <a-breadcrumb-item>List</a-breadcrumb-item>-->
-        <!--        <a-breadcrumb-item>App</a-breadcrumb-item>-->
-      </a-breadcrumb>
+    <a-layout-content class="m-5">
       <div :style="{ background: '#fff', padding: '24px' }" class="min-h-max">
         <router-view/>
       </div>
@@ -44,6 +42,7 @@ import {computed, onUnmounted, ref, onMounted} from 'vue';
 import {menuStore} from './stores/stock';
 
 const stockZsData = ref({})
+
 const menuVal = menuStore();
 const selectedKeys = computed({
   get() {
@@ -76,6 +75,7 @@ function stockZsSSE() {
     sse.close();
   });
 }
+
 
 onMounted(() => {
   stockZsSSE()
