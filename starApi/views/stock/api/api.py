@@ -1,4 +1,5 @@
 import time
+import hashlib
 
 from fastapi import *
 from fastapi.routing import APIRouter
@@ -58,17 +59,22 @@ async def stock_trend_data(request: Request, item: StockItem):
 
 # SSE生成器，用于向客户端发送事件流
 async def event_generator(request: Request):
+    md5_code = ""
     while True:
         if await request.is_disconnected():
-            print("连接已中断")
+            logger.info("连接已中断")
             break
-        data = '111'
-        yield f"data: {data}\n\n"
+
+        data = ReqClient.stock_zs()
+        new_md5_code = hashlib.md5(str(data).encode()).hexdigest()
+        if md5_code != new_md5_code:
+            md5_code = new_md5_code
+            yield f"data: {data}\n\n"
         time.sleep(1)
 
 
 # SSE endpoint，用于客户端连接
-@router.get("/sse")
-async def sse(request: Request):
+@router.get("/stock/zs")
+async def stock_zs(request: Request):
     # 返回SSE流
     return StreamingResponse(event_generator(request), media_type="text/event-stream")

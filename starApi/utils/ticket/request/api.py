@@ -1,3 +1,5 @@
+import json
+
 from PrSpider import Xpath
 import requests
 
@@ -110,7 +112,7 @@ class RequestClient:
                  json_data.get('f18'), json_data.get('f16'), json_data.get('f14'), json_data.get('f12'),
                  ]
         try:
-            md = merge_md(to_float_list(json_data.get('f43')), md_jg)
+            md = merge_md(to_float_list(json_data.get('f43'), json_data.get('f51')), md_jg)
             item['md'] = md
         except:
             item['md'] = ''
@@ -273,10 +275,35 @@ class RequestClient:
             json_data = [i.split(',') for i in json_data]
         return json_data
 
+    @catch_exceptions
+    def stock_zs(self):
+        """
+        获取上证、深圳指数信息
+        :return:
+        """
+        url = f"https://push2.eastmoney.com/api/qt/ulist.np/get"
+        params = {
+            "cb": "",
+            "fltt": "2",
+            "secids": "1.000001,0.399001",
+            "fields": "f1,f2,f3,f4,f6,f12,f13,f104,f105,f106",
+            "ut": "",
+            "_": ""
+        }
+        response = self.session.get(url, params=params)
+        json_data = response.json()
+        json_data = json_data.get('data').get('diff') or {}
+        item = {
+            "shz": json_data[0].get('f2'),
+            "sz": json_data[1].get('f2'),
+        }
+        return json.dumps(item)
+
 
 def main():
     client = RequestClient()
-    stock_data = client.stock_details('0.002131')
+    # stock_data = client.stock_details('0.002131')
+    stock_data = client.stock_zs()
     print(stock_data)
 
 

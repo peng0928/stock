@@ -12,12 +12,15 @@ def to_yi(n):
     return s
 
 
-def to_float_list(current_value):
+def to_float_list(current_value, zt_value):
     # 定义步长
     step = 0.01
     # 生成列表并四舍五入到小数点后两位
     float_list = [round(current_value + step * i, 2) for i in range(1, 6)][::-1] + [round(current_value - step * i, 2)
                                                                                     for i in range(4, -1, -1)][::-1]
+    result = any(x > zt_value for x in float_list)
+    if result:
+        float_list = [x - step for x in float_list]
     return float_list
 
 

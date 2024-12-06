@@ -12,3 +12,14 @@ export const useInputStore = defineStore('stock', {
     },
     persist: true
 });
+export const menuStore = defineStore('menuStore', {
+    state: () => ({
+        name: "1",
+    }),
+    actions: {
+        update(value) {
+            this.name = value;
+        }
+    },
+    persist: true
+});

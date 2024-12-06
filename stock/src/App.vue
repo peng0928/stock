@@ -2,34 +2,82 @@
   <a-layout class="layout">
     <a-layout-header>
       <div class="logo"/>
-      <a-menu
-          v-model:selectedKeys="selectedKeys"
-          theme="dark"
-          mode="horizontal"
-          :style="{ lineHeight: '64px' }"
-      >
-        <a-menu-item key="1">首页</a-menu-item>
-        <a-menu-item key="2">涨停版</a-menu-item>
-
-      </a-menu>
+      <div class="flex justify-between">
+        <a-menu
+            v-model:selectedKeys="selectedKeys"
+            theme="dark"
+            mode="horizontal"
+            :style="{ lineHeight: '64px' }"
+        >
+          <a-menu-item key="1">
+            <router-link to="/">大盘</router-link>
+          </a-menu-item>
+          <a-menu-item key="2">
+            <router-link to="/stock">个股</router-link>
+          </a-menu-item>
+          <a-menu-item key="3">涨停版</a-menu-item>
+        </a-menu>
+        <div class="text-right text-white flex">
+          <div class="text-red-500">上证：{{stockZsData.shz}}</div>
+          <div class="pl-5">深证: {{stockZsData.sz}}</div>
+        </div>
+      </div>
     </a-layout-header>
     <a-layout-content style="padding: 0 50px">
       <a-breadcrumb style="margin: 16px 0">
-<!--        <a-breadcrumb-item>Home</a-breadcrumb-item>-->
-<!--        <a-breadcrumb-item>List</a-breadcrumb-item>-->
-<!--        <a-breadcrumb-item>App</a-breadcrumb-item>-->
+        <!--        <a-breadcrumb-item>Home</a-breadcrumb-item>-->
+        <!--        <a-breadcrumb-item>List</a-breadcrumb-item>-->
+        <!--        <a-breadcrumb-item>App</a-breadcrumb-item>-->
       </a-breadcrumb>
       <div :style="{ background: '#fff', padding: '24px' }" class="min-h-max">
         <router-view/>
       </div>
     </a-layout-content>
+
     <a-layout-footer style="text-align: center" class="fixed bottom-0 w-full">
       Ant Design ©2018 Created by Ant UED
     </a-layout-footer>
   </a-layout>
 </template>
 <script setup>
-import {ref} from 'vue';
+import {computed, onUnmounted, ref, onMounted} from 'vue';
+import {menuStore} from './stores/stock';
 
-const selectedKeys = ref(['1']);
+const stockZsData = ref({})
+const menuVal = menuStore();
+const selectedKeys = computed({
+  get() {
+    return [menuVal.name];
+  },
+  set(value) {
+    menuVal.update(value[0]);
+  }
+});
+
+function stockZsSSE() {
+  const sse = new EventSource('/api/stock/zs');
+  sse.onmessage = (event) => {
+    stockZsData.value = JSON.parse(event.data);
+  };
+
+  // 监听连接打开事件
+  sse.onopen = (event) => {
+    console.log('SSE连接已打开', event);
+  };
+
+  // 监听错误事件
+  sse.onerror = (event) => {
+    console.error('SSE连接发生错误', event);
+    sse.close(); // 尝试关闭连接
+  };
+
+  // 组件卸载时关闭SSE连接
+  onUnmounted(() => {
+    sse.close();
+  });
+}
+
+onMounted(() => {
+  stockZsSSE()
+})
 </script>

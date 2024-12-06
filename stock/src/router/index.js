@@ -4,9 +4,17 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: () => import('../components/HelloWorld.vue'),
+        component: () => import('../components/HomeIndex.vue'),
         meta: {
             title: '大盘'
+        },
+    },
+    {
+        path: '/stock',
+        name: 'Home',
+        component: () => import('../components/stockIndex.vue'),
+        meta: {
+            title: '个股'
         },
     }
 ];

@@ -10,8 +10,9 @@
     </div>
   </div>
   <div class="flex" v-if="stock.name">
+    <!--侧边板块-->
     <div class="w-2/12">
-      <div class="max-h-dvh overflow-y-auto no-scrollbar text-center pb-16">
+      <div v-if="stockPlate" class="max-h-dvh overflow-y-auto no-scrollbar text-center pb-16">
         <div v-for="(item, index) in stockPlate" :key="index">
           <div class="m-4 h-32 rounded-lg" :class="chgBgColor(item.rate)">
             <p class="font-medium text-xs pt-5">{{ item.code }}</p>
@@ -24,8 +25,9 @@
           </div>
         </div>
       </div>
+      <a-skeleton active v-else/>
     </div>
-    <div class="w-10/12 m-4">
+    <div class="w-full m-4">
       <div class="text-lg font-medium flex justify-between">
         <div>
           <div class="flex">
@@ -107,7 +109,7 @@
             </div>
           </div>
         </div>
-        <div class="w-1/4 pt-3">
+        <div class="w-1/3 pt-3 right-0">
           <div v-if="stock.md">
             <div class="p-2 mx-2 border-2 border-blue-200 rounded-lg font-light text-xs h-2/5"
                  :class="borderColor()">
@@ -156,13 +158,14 @@
               </div>
             </div>
           </div>
-          <div v-else>
-            <a-skeleton/>
+          <div v-else class="h-2/5">
+            <a-skeleton active/>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <div v-else class="flex container mx-auto items-center justify-center pt-10 ">
     <icon-font type="icon-zanwuxinxi" :style="{fontSize: '350px'}"/>
   </div>
