@@ -1,6 +1,10 @@
 def to_yi(n):
+    fs = False
     try:
         n = int(n)
+        if n < 0:
+            fs = True
+            n = abs(n)
     except:
         return n
     s = round(n / 100000000, 2)
@@ -9,6 +13,8 @@ def to_yi(n):
         s = str(s) + '万'
     else:
         s = str(s) + '亿'
+    if fs:
+        s = '-' + s
     return s
 
 

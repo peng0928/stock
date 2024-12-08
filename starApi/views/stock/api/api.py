@@ -57,6 +57,12 @@ async def stock_trend_data(request: Request, item: StockItem):
     return JSONResponse(status_code=200, content=data)
 
 
+@router.post("/stock/bk")
+async def stock_bk(request: Request, ):
+    data = ReqClient.stock_bk()
+    return JSONResponse(status_code=200, content=data)
+
+
 # SSE生成器，用于向客户端发送事件流
 async def event_generator(request: Request):
     md5_code = ""

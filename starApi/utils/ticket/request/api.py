@@ -299,11 +299,53 @@ class RequestClient:
         }
         return json.dumps(item)
 
+    @catch_exceptions
+    def stock_bk(self):
+        """
+        获取上证、深圳指数信息
+        :return:
+        """
+        item = []
+        url = "https://push2.eastmoney.com/api/qt/clist/get"
+        params = {
+            "cb": "",
+            "fid": "f62",
+            "po": "1",
+            "pz": "1000",
+            "pn": "1",
+            "np": "1",
+            "fltt": "2",
+            "invt": "2",
+            "ut": "",
+            "fs": "m:90 t:2",
+            "fields": "f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124,f1,f13"
+        }
+        response = self.session.get(url, params=params)
+        json_data = response.json()
+        json_data = json_data.get('data').get('diff') or {}
+        for val in json_data:
+            item.append({
+                "name": val.get('f14'),
+                "zdg": val.get('f204'),
+                "zf": val.get('f3'),
+                "zlje": to_yi(val.get('f62')),
+                "zljzb": val.get('f184'),
+                "jrcddje": to_yi(val.get('f66')),
+                "jrcddjzb": val.get('f69'),
+                "jrddje": to_yi(val.get('f72')),
+                "jrddjzb": val.get('f75'),
+                "jrzdje": to_yi(val.get('f78')),
+                "jrzdjzb": val.get('f81'),
+                "jrxdje": to_yi(val.get('f84')),
+                "jrxdjzb": val.get('f87'),
+            })
+        return item
+
 
 def main():
     client = RequestClient()
     # stock_data = client.stock_details('0.002131')
-    stock_data = client.stock_zs()
+    stock_data = client.stock_bk()
     print(stock_data)
 
 
