@@ -1,26 +1,38 @@
 <template>
+  <div>
+    <a-button class="m-3">
+      <template #icon>
+          <icon-font type="icon-liebiaomoshi" :style="{fontSize: '18px'}" style="padding-bottom: 10px" />
+      </template>
+    </a-button>
+      <a-button>
+      <template #icon>
+          <icon-font type="icon-GC-tubiaomoshi" :style="{fontSize: '18px'}" style="padding-bottom: 10px; padding-right: 1px" />
+      </template>
+    </a-button>
+  </div>
   <div class="grid grid-cols-5 gap-4 text-center pb-8">
     <div v-for="(item, index) in plateData" :key="index" class="text-sm ">
       <div class="rounded-lg h-28 flex text-nowrap" :class="chgBgColor(item.zf)">
         <div class="m-2 text-xs text-left w-1/3">
-          <div>净额</div>
-          <div>主: {{item.zlje}}</div>
-          <div>超: {{item.jrcddje}}</div>
-          <div>大: {{item.jrddje}}</div>
-          <div>中: {{item.jrzdje}}</div>
-          <div>小: {{item.jrxdje}}</div>
+          <!--          <div>净额</div>-->
+          <!--          <div>主: {{item.zlje}}</div>-->
+          <!--          <div>超: {{item.jrcddje}}</div>-->
+          <!--          <div>大: {{item.jrddje}}</div>-->
+          <!--          <div>中: {{item.jrzdje}}</div>-->
+          <!--          <div>小: {{item.jrxdje}}</div>-->
         </div>
         <div class="m-4 w-1/3">
           <div class="text-lg">{{ item.name }}</div>
           <div class="pt-3 text-lg" :class="textColor(item.zf)">涨幅: {{ item.zf }}</div>
         </div>
         <div class="m-2 text-xs w-1/3 text-right">
-          <div>净占比</div>
-          <div>{{item.zljzb}}</div>
-          <div>{{item.jrcddjzb}}</div>
-          <div>{{item.jrddjzb}}</div>
-          <div>{{item.jrzdjzb}}</div>
-          <div>{{item.jrxdjzb}}</div>
+          <!--          <div>净占比</div>-->
+          <!--          <div>{{item.zljzb}}</div>-->
+          <!--          <div>{{item.jrcddjzb}}</div>-->
+          <!--          <div>{{item.jrddjzb}}</div>-->
+          <!--          <div>{{item.jrzdjzb}}</div>-->
+          <!--          <div>{{item.jrxdjzb}}</div>-->
         </div>
       </div>
     </div>
@@ -30,12 +42,19 @@
 
 import {ref} from "@vue/reactivity";
 import {onMounted} from "vue";
+import {createFromIconfontCN} from "@ant-design/icons-vue";
 
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_4766848_85as6e2e8rl.js',
+});
 const plateData = ref([])
 const textColor = (chg = 0) => {
   return chg < 0 ? 'text-green-500 hover:text-green-600' : 'text-red-500 hover:text-red-600';
 };
 const chgBgColor = (chg = 0) => {
+  if (chg === 0){
+    return 'bg-blue-200 hover:bg-blue-300'
+  }
   return chg < 0 ? 'bg-green-200 hover:bg-green-300' : ' bg-red-200 hover:bg-red-300';
 };
 const StockPlateData = async () => {

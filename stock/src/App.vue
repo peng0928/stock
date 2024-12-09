@@ -40,7 +40,11 @@
 <script setup>
 import {computed, onUnmounted, ref, onMounted} from 'vue';
 import {menuStore} from './stores/stock';
+import {createFromIconfontCN} from "@ant-design/icons-vue";
 
+const IconFont = createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/c/font_4766848_85as6e2e8rl.js',
+});
 const stockZsData = ref({})
 
 const menuVal = menuStore();

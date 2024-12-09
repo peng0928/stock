@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <a-skeleton active v-else/>
+      <a-skeleton active v-else :paragraph="{ rows: 20 }"/>
     </div>
     <div class="w-full m-4">
       <div class="text-lg font-medium flex justify-between">
@@ -77,35 +77,8 @@
       <div class="container flex h-3/5">
         <div id="main" class="w-full" style="min-height: 60vh;">
           <div>
-            <div class="mx-auto mt-5 w-full max-w-sm rounded-md  p-4" v-if="echartsDataFlags">
-              <div class="animate-pulse space-x-4 w-full">
-                <div class="grid w-full">
-                  <div class="flex">
-                    <div class="rounded-full bg-slate-200"></div>
-                    <div class="ms-4 w-full space-y-6">
-                      <div class="h-2 rounded bg-slate-200"></div>
-                      <div class="space-y-3">
-                        <div class="grid grid-cols-3 gap-4">
-                          <div class="col-span-2 h-2 rounded bg-slate-200"></div>
-                          <div class="col-span-1 h-2 rounded bg-slate-200"></div>
-                        </div>
-                        <div class="h-2 rounded bg-slate-200"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="mt-5 space-y-6 py-1">
-                    <div class="h-2 rounded bg-slate-200"></div>
-                    <div class="space-y-3">
-                      <div class="grid grid-cols-3 gap-4">
-                        <div class="col-span-2 h-2 rounded bg-slate-200"></div>
-                        <div class="col-span-1 h-2 rounded bg-slate-200"></div>
-                      </div>
-                      <div class="h-2 rounded bg-slate-200"></div>
-                    </div>
-                    <div class="h-2 rounded bg-slate-200"></div>
-                  </div>
-                </div>
-              </div>
+            <div class="mx-auto mt-5 w-full max-w-sm rounded-md  p-4" v-if="!echartsDataFlags">
+              <a-skeleton active :paragraph="{ rows: 6 }"/>
             </div>
           </div>
         </div>
@@ -173,7 +146,7 @@
 
 
 <script setup>
-import {ref, computed, onMounted, onBeforeUnmount} from 'vue'
+import {ref, computed, onMounted, onBeforeUnmount, onUnmounted} from 'vue'
 import {createFromIconfontCN} from '@ant-design/icons-vue';
 import * as echarts from 'echarts';
 import {useInputStore} from '../stores/stock';
@@ -182,9 +155,14 @@ import func from '../stores/func';
 const convertToChinese = func.convertToChinese;
 const try_toFixed = func.try_toFixed;
 const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_4766848_zfmsqvszl5h.js',
+  scriptUrl: '//at.alicdn.com/t/c/font_4766848_85as6e2e8rl.js',
 });
 const inputStore = useInputStore();
+const SSE = ref({
+  get: undefined,
+  trend: undefined,
+  trend_data: undefined,
+})
 
 // 将 store 中的值映射为响应式数据
 const stockName = computed({
@@ -198,7 +176,7 @@ const stockName = computed({
 const state = ref({
   check: false
 })
-const stockPlate = ref([])
+const stockPlate = ref(false)
 const echartsDataFlags = ref(false)
 const stockDetails = ref([])
 const stockPlateTest = ref([])
@@ -304,63 +282,111 @@ const chgBgColor = (chg = 0) => {
   return va < 0 ? 'bg-green-100 hover:bg-green-200' : ' bg-red-100 hover:bg-red-200';
 };
 const Stock = async () => {
-  StockGet();
-  doFunc();
-};
-const StockGet = async (e = true) => {
-  try {
-    const response = await fetch('/api/stock/get', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', // 设置请求体格式为 JSON
-      },
-      body: JSON.stringify({
-        code: stockName.value,
-      }),
-    });
-    // 解析响应数据
-    const query = await response.json();
-    stock.value = query;
-    if (e) {
-      StockTrendData();
-      StockDetails();
-      StockTrend();
+  // StockGet();
+  // doFunc();
+  stock.value = {};
+  Object.entries(SSE.value).forEach(([key, value]) => {
+    console.log(`Key: ${key}, Value: ${value}`);
+    if (value !== undefined) {
+      console.log('SSE正在关闭 =>', key);
+      value.close();
     }
-  } catch (error) {
-    console.log('There was an error!', error);
-  }
+  });
+  StockGetSSE()
+  StockTrendDataSSE()
+  StockTrendSSE()
 };
-const StockTrend = async () => {
+
+function StockGetSSE() {
+  const sse = new EventSource('/api/stock/get/' + stockName.value);
+  sse.onmessage = (event) => {
+    stock.value = JSON.parse(event.data);
+  };
+  // 监听连接打开事件
+  sse.onopen = (event) => {
+    console.log('SSE连接已打开', event);
+  };
+
+  // 监听错误事件
+  sse.onerror = (event) => {
+    console.error('SSE连接发生错误', event);
+    sse.close(); // 尝试关闭连接
+  };
+  SSE.value.get = sse;
+}
+
+async function StockTrendDataSSE() {
+  const dp = stock.value.cid;
+  if (dp) {
+    const sse = new EventSource('/api/stock/trend/data/' + dp);
+    sse.onmessage = (event) => {
+      const query = JSON.parse(event.data);
+      const title = stock.value.name;
+      if (query.trends.length > 0) {
+        echartsDataFlags.value = true;
+      }
+      console.log('echartsDataFlags', echartsDataFlags.value, query.trends)
+      EchartMain(title, query.trends)
+    };
+
+    // 监听连接打开事件
+    sse.onopen = (event) => {
+      console.log('SSE连接已打开', event);
+    };
+
+    // 监听错误事件
+    sse.onerror = (event) => {
+      console.error('SSE连接发生错误', event);
+      sse.close(); // 尝试关闭连接
+    };
+
+    SSE.value.trend_data = sse;
+  } else {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    StockTrendDataSSE()
+  }
+}
+
+async function StockTrendSSE() {
   const hy = stock.value.hy;
   const dp = stock.value.dp;
-  try {
-    const response = await fetch('/api/stock/trend', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json', // 设置请求体格式为 JSON
-      },
-      body: JSON.stringify({
-        hy: hy,
-        dp: dp,
-        code: stockName.value,
-      }),
-    });
-    // 解析响应数据
-    const query = await response.json();
-    query.sort((a, b) => {
-      // 比较a和b的a属性
-      if (a.rate < b.rate) {
-        return 1; // 如果a.a小于b.a，则a应该排在b前面
-      }
-      if (a.rate > b.rate) {
-        return -1; // 如果a.a大于b.a，则a应该排在b后面
-      }
-      return 0; // 如果a.a等于b.a，则a和b的顺序不变
-    });
-    stockPlate.value = query;
-  } catch (error) {
-    console.log('There was an error!', error);
+  if (dp) {
+    const sse = new EventSource('/api/stock/trend?' + 'hy=' + hy + '&dp=' + dp + '&code=' + stockName.value);
+    sse.onmessage = (event) => {
+      const query = JSON.parse(event.data);
+      query.sort((a, b) => {
+        // 比较a和b的a属性
+        if (a.rate < b.rate) {
+          return 1; // 如果a.a小于b.a，则a应该排在b前面
+        }
+        if (a.rate > b.rate) {
+          return -1; // 如果a.a大于b.a，则a应该排在b后面
+        }
+        return 0; // 如果a.a等于b.a，则a和b的顺序不变
+      });
+      stockPlate.value = query;
+    };
+
+    // 监听连接打开事件
+    sse.onopen = (event) => {
+      console.log('SSE连接已打开', event);
+    };
+
+    // 监听错误事件
+    sse.onerror = (event) => {
+      console.error('SSE连接发生错误', event);
+      sse.close(); // 尝试关闭连接
+    };
+
+    SSE.value.trend = sse;
+  } else {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    StockTrendSSE()
   }
+}
+
+const StockTrend = async () => {
+
 };
 const StockTrendData = async () => {
   const title = stock.value.name;
