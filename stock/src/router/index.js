@@ -24,6 +24,13 @@ const routes = [
         meta: {
             title: '板块'
         },
+    }, {
+        path: '/ztb',
+        name: 'ztb',
+        component: () => import('../components/stockZtb.vue'),
+        meta: {
+            title: '涨停板'
+        },
     }
 ];
 

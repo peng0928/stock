@@ -6,7 +6,6 @@
       </template>
     </a-input-search>
     <div class="ml-3 mt-1">
-      <a-switch v-model:checked="state.check" checked-children="开" un-checked-children="关" @change="doFunc"/>
     </div>
   </div>
   <div class="flex" v-if="stock.name">
@@ -27,9 +26,9 @@
       </div>
       <a-skeleton active v-else :paragraph="{ rows: 20 }"/>
     </div>
-    <div class="w-full m-4">
+    <div class="w-screen m-4">
       <div class="text-lg font-medium flex justify-between">
-        <div>
+        <div class="w-10/12">
           <div class="flex">
             <p class="mr-2">{{ stock.name }}</p>
             <p>{{ stock.code }}</p>
@@ -57,7 +56,7 @@
             <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
           </div>
         </div>
-        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-72"
+        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-2/12"
              :class="borderColor()">
           <div class="p-3 mx-2 container w-5/6 mx-auto">
             <div v-for="(item, index) in stockInfo" :key="index" class="text-nowrap flex justify-between">
@@ -74,15 +73,15 @@
         </div>
       </div>
 
-      <div class="container flex h-3/5">
-        <div id="main" class="w-full" style="min-height: 60vh;">
+      <div class="w-full flex h-3/5">
+        <div id="main" class="w-10/12" style="min-height: 60vh;">
           <div>
             <div class="mx-auto mt-5 w-full max-w-sm rounded-md  p-4" v-if="!echartsDataFlags">
               <a-skeleton active :paragraph="{ rows: 6 }"/>
             </div>
           </div>
         </div>
-        <div class="w-1/3 pt-3 right-0">
+        <div class="w-2/12 pt-16 right-0">
           <div v-if="stock.md">
             <div class="p-2 mx-2 border-2 border-blue-200 rounded-lg font-light text-xs h-2/5"
                  :class="borderColor()">
@@ -285,6 +284,13 @@ const Stock = async () => {
   // StockGet();
   // doFunc();
   stock.value = {};
+  StockGet();
+  closeSSE();
+  StockGetSSE();
+  StockTrendDataSSE();
+  StockTrendSSE();
+};
+const closeSSE = () => {
   Object.entries(SSE.value).forEach(([key, value]) => {
     console.log(`Key: ${key}, Value: ${value}`);
     if (value !== undefined) {
@@ -292,9 +298,6 @@ const Stock = async () => {
       value.close();
     }
   });
-  StockGetSSE()
-  StockTrendDataSSE()
-  StockTrendSSE()
 };
 
 function StockGetSSE() {
@@ -385,8 +388,61 @@ async function StockTrendSSE() {
   }
 }
 
-const StockTrend = async () => {
 
+const StockGet = async (e = true) => {
+  try {
+    const response = await fetch('/api/stock/get', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // 设置请求体格式为 JSON
+      },
+      body: JSON.stringify({
+        code: stockName.value,
+      }),
+    });
+    // 解析响应数据
+    const query = await response.json();
+    stock.value = query;
+    if (e) {
+      StockTrendData();
+      StockDetails();
+      StockTrend();
+    }
+  } catch (error) {
+    console.log('There was an error!', error);
+  }
+};
+const StockTrend = async () => {
+  const hy = stock.value.hy;
+  const dp = stock.value.dp;
+  try {
+    const response = await fetch('/api/stock/trend', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // 设置请求体格式为 JSON
+      },
+      body: JSON.stringify({
+        hy: hy,
+        dp: dp,
+        code: stockName.value,
+      }),
+    });
+    // 解析响应数据
+    const query = await response.json();
+    query.sort((a, b) => {
+      // 比较a和b的a属性
+      if (a.rate < b.rate) {
+        return 1; // 如果a.a小于b.a，则a应该排在b前面
+      }
+      if (a.rate > b.rate) {
+        return -1; // 如果a.a大于b.a，则a应该排在b后面
+      }
+      return 0; // 如果a.a等于b.a，则a和b的顺序不变
+    });
+    stockPlate.value = query;
+  } catch (error) {
+    console.log('There was an error!', error);
+  }
 };
 const StockTrendData = async () => {
   const title = stock.value.name;
@@ -431,32 +487,7 @@ const StockDetails = async () => {
     console.log('There was an error!', error);
   }
 };
-const doFunc = () => {
-  const timeList = timer.value;
-  if (stock.value.name) {
-    for (let i = 0; i < timeList.length; i++) {
-      clearTimeout(timeList[i]);
-    }
-  }
-  if (state.value.check) {
-    const tid = setInterval(() => {
-      StockGet(false)
-    }, 1000);
-    timer.value.push(tid);
-    const cid = setInterval(() => {
-      StockTrendData()
-    }, 1000);
-    timer.value.push(cid);
-    const did = setInterval(() => {
-      StockDetails()
-    }, 1000);
-    timer.value.push(did);
-    const pid = setInterval(() => {
-      StockTrend()
-    }, 10000);
-    timer.value.push(pid);
-  }
-}
+
 // ECHART
 
 const formatNumber = (number) => {
@@ -670,6 +701,9 @@ const EchartMain = (title, data) => {
 
 };
 onMounted(() => {
+})
+onUnmounted(() => {
+  closeSSE();
 })
 
 </script>

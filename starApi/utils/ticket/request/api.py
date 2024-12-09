@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from PrSpider import Xpath
@@ -302,7 +303,7 @@ class RequestClient:
     @catch_exceptions
     def stock_bk(self):
         """
-        获取上证、深圳指数信息
+        获取板块信息
         :return:
         """
         item = []
@@ -341,11 +342,55 @@ class RequestClient:
             })
         return item
 
+    @catch_exceptions
+    def stock_ZTPool(self):
+        """
+        获取涨停板信息
+        :return:
+        """
+        item = []
+        url = "https://push2ex.eastmoney.com/getTopicZTPool"
+        date = datetime.datetime.now().strftime("%Y%m%d")
+        params = {
+            "cb": "",
+            "ut": "7eea3edcaed734bea9cbfc24409ed989",
+            "dpt": "wz.ztzt",
+            "Pageindex": "0",
+            "pagesize": "1000",
+            "sort": "fbt:asc",
+            "date": date,
+            "_": ""
+        }
+        response = self.session.get(url, params=params)
+        json_data = response.json()
+        json_data = json_data.get('data').get('pool') or {}
+        if json_data:
+            for index, val in enumerate(json_data):
+                item.append({
+                    "code": val.get('c'),
+                    "name": val.get('n'),
+                    "zd": val.get('zdp'),
+                    "zxj": val.get('p'),
+                    "cje": val.get('amount'),
+                    "zsz": val.get('tshare'),
+                    "hs": val.get('hs'),
+                    "fbjj": val.get('fund'),
+                    "ltsz": val.get('ltsz'),
+                    "fbt": val.get('fbt'),
+                    "lbt": val.get('lbt'),
+                    "zbcs": val.get('zbc'),
+                    "lbs": val.get('lbc'),
+                    "hy": val.get('hybk'),
+                    "zttj": val.get('zttj'),
+                    "inx": str(index + 1),
+                })
+        return item
+
 
 def main():
     client = RequestClient()
     # stock_data = client.stock_details('0.002131')
-    stock_data = client.stock_bk()
+    stock_data = client.stock_ZTPool()
     print(stock_data)
 
 

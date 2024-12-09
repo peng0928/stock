@@ -18,7 +18,9 @@
           <a-menu-item key="3">
             <router-link to="/plate">板块</router-link>
           </a-menu-item>
-          <a-menu-item key="4">涨停版</a-menu-item>
+          <a-menu-item key="4">
+            <router-link to="/ztb">涨停版</router-link>
+          </a-menu-item>
         </a-menu>
         <div class="text-right text-white flex">
           <div class="text-red-500">上证：{{ stockZsData.shz }}</div>

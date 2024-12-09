@@ -21,24 +21,56 @@ sse_time = 0.614
 media_type = "text/event-stream"
 
 
+@router.post("/stock/get")
+async def stock_get(request: Request, item: StockItem):
+    data = ReqClient.stock_get(code=item.code)
+    return JSONResponse(status_code=200, content=data)
+
+
+@router.post("/stock/trend")
+async def stock_trend(request: Request, item: StockTrend):
+    hy = item.hy
+    dp = item.dp
+    code = item.code
+    data = []
+    hy_data = ReqClient.stock_trends2(code=hy)
+    dp_data = ReqClient.stock_trends2(code=dp)
+    if hy_data:
+        data.append(hy_data)
+    if dp_data:
+        data.append(dp_data)
+    bk_data = ReqClient.stock_securities(code=code)
+    if bk_data:
+        for item in bk_data:
+            data.append(item)
+    return JSONResponse(status_code=200, content=data)
+
+
+@router.post("/stock/trend/data")
+async def stock_trend_data(request: Request, item: StockItem):
+    code = item.code
+    data = ReqClient.stock_trends(code=code)
+    return JSONResponse(status_code=200, content=data)
+
+
 @router.get("/stock/get/{item}")
-async def stock_get(request: Request, item):
+async def stock_get_sse(request: Request, item):
     return StreamingResponse(event_generator(request, 'stock_get', code=item), media_type=media_type)
 
 
 @router.get("/stock/trend")
-async def stock_trend(request: Request, hy, dp, code):
+async def stock_trend_sse(request: Request, hy, dp, code):
     return StreamingResponse(event_generator(request, 'trend_data', hy=hy, dp=dp, code=code, stime=3),
                              media_type=media_type)
 
 
 @router.get("/stock/trend/data/{item}")
-async def stock_trend_data(request: Request, item):
+async def stock_trend_data_sse(request: Request, item):
     return StreamingResponse(event_generator(request, 'stock_trends', code=item), media_type=media_type)
 
 
 @router.post("/stock/details")
-async def stock_trend_data(request: Request, item: StockItem):
+async def stock_trend_details(request: Request, item: StockItem):
     code = item.code
     data = ReqClient.stock_details(code=code)
     return JSONResponse(status_code=200, content=data)
@@ -47,6 +79,12 @@ async def stock_trend_data(request: Request, item: StockItem):
 @router.post("/stock/bk")
 async def stock_bk(request: Request, ):
     data = ReqClient.stock_bk()
+    return JSONResponse(status_code=200, content=data)
+
+
+@router.post("/stock/ztb")  # 涨停板
+async def stock_ztb(request: Request ):
+    data = ReqClient.stock_ZTPool()
     return JSONResponse(status_code=200, content=data)
 
 
