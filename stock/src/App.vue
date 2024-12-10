@@ -23,8 +23,8 @@
           </a-menu-item>
         </a-menu>
         <div class="text-right text-white flex">
-          <div class="text-red-500">上证：{{ stockZsData.shz }}</div>
-          <div class="pl-5">深证: {{ stockZsData.sz }}</div>
+          <div :class="StyleColor(stockZsData.shz_zf, )">上证：<span>{{ stockZsData.shz }}</span></div>
+          <div class="pl-5" :class="StyleColor(stockZsData.sz_zf, )">深证: <span>{{ stockZsData.sz }}</span></div>
         </div>
       </div>
     </a-layout-header>
@@ -43,7 +43,9 @@
 import {computed, onUnmounted, ref, onMounted} from 'vue';
 import {menuStore} from './stores/stock';
 import {createFromIconfontCN} from "@ant-design/icons-vue";
+import func from './stores/func';
 
+const StyleColor = func.StyleColor;
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4766848_85as6e2e8rl.js',
 });
@@ -58,9 +60,9 @@ const selectedKeys = computed({
     menuVal.update(value[0]);
   }
 });
+const sse = new EventSource('/api/stock/zs');
 
 function stockZsSSE() {
-  const sse = new EventSource('/api/stock/zs');
   sse.onmessage = (event) => {
     stockZsData.value = JSON.parse(event.data);
   };
@@ -76,14 +78,14 @@ function stockZsSSE() {
     sse.close(); // 尝试关闭连接
   };
 
-  // 组件卸载时关闭SSE连接
-  onUnmounted(() => {
-    sse.close();
-  });
 }
 
 
 onMounted(() => {
   stockZsSSE()
+})
+onUnmounted(() => {
+  sse.close();
+
 })
 </script>
