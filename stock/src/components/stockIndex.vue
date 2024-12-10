@@ -27,8 +27,8 @@
       <a-skeleton active v-else :paragraph="{ rows: 20 }"/>
     </div>
     <div class="w-screen m-4">
-      <div class="text-lg font-medium flex justify-between">
-        <div class="w-10/12">
+      <div class="text-lg font-medium flex h-1/4 ">
+        <div class="w-1/4 m-4">
           <div class="flex">
             <p class="mr-2">{{ stock.name }}</p>
             <p>{{ stock.code }}</p>
@@ -56,15 +56,15 @@
             <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
           </div>
         </div>
-        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-2/12"
+        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-3/4 h-20 m-4"
              :class="borderColor()">
-          <div class="p-3 mx-2 container w-5/6 mx-auto">
-            <div v-for="(item, index) in stockInfo" :key="index" class="text-nowrap flex justify-between">
-              <div class="flex hover:font-bold w-1/2">
+          <div v-for="(item, index) in stockInfo" :key="index" class="grid grid-cols-5 gap-4 text-center m-4">
+            <div class="text-nowrap relative">
+              <div class="flex hover:font-bold">
                 <div>{{ item.n1 }}:</div>
                 <div :class="stockColor(item.c1)" class="pl-1">{{ stock[item.k1] }}</div>
               </div>
-              <div class="flex text-left w-1/3 hover:font-bold">
+              <div class="flex absolute bottom-0 hover:font-bold">
                 <div>{{ item.n2 }}:</div>
                 <div :class="stockColor(item.c2)" class="pl-1">{{ stock[item.k2] }}</div>
               </div>
