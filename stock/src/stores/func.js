@@ -45,4 +45,11 @@ function splitString(str) {
     }, []).join(':');
 }
 
-export default {convertToChinese, try_toFixed, splitString};
+const StyleColor = (value = 0, large = 0, color = 'red', colorNum = 500, elseColor = 'text-green-500') => {
+    if (value === 0) {
+        return elseColor
+    }
+    return value >= large ? `text-${color}-${colorNum}` : `text-green-${colorNum}`;
+};
+
+export default {convertToChinese, try_toFixed, splitString, StyleColor};
