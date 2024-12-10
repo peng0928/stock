@@ -294,9 +294,12 @@ class RequestClient:
         response = self.session.get(url, params=params)
         json_data = response.json()
         json_data = json_data.get('data').get('diff') or {}
+        print(json_data)
         item = {
             "shz": json_data[0].get('f2'),
+            "shz_zf": json_data[0].get('f4'),
             "sz": json_data[1].get('f2'),
+            "sz_zf": json_data[1].get('f4'),
         }
         return json.dumps(item)
 
@@ -390,7 +393,7 @@ class RequestClient:
 def main():
     client = RequestClient()
     # stock_data = client.stock_details('0.002131')
-    stock_data = client.stock_ZTPool()
+    stock_data = client.stock_zs()
     print(stock_data)
 
 
