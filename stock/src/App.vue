@@ -1,4 +1,4 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <a-layout class="layout">
     <a-layout-header>
       <div class="logo"/>
@@ -19,12 +19,69 @@
             <router-link to="/plate">板块</router-link>
           </a-menu-item>
           <a-menu-item key="4">
-            <router-link to="/ztb">涨停版</router-link>
+            <router-link to="/ztb">涨停板</router-link>
+          </a-menu-item>
+          <a-menu-item key="5">
+            <router-link to="/duanban">昨日涨停板</router-link>
           </a-menu-item>
         </a-menu>
         <div class="text-right text-white flex">
-          <div :class="StyleColor(stockZsData.shz_zf, )">上证：<span>{{ stockZsData.shz }}</span></div>
-          <div class="pl-5" :class="StyleColor(stockZsData.sz_zf, )">深证: <span>{{ stockZsData.sz }}</span></div>
+          <a-tooltip placement="bottom" color="white" class="pr-5">
+            <template #title>
+              <div class="container text-right">
+                <div class="text-red-500 flex justify-between">
+                  <div>涨:</div>
+                  <div>{{ stockZsData.shz_zs }}</div>
+                </div>
+                <div class="text-black flex justify-between">
+                  <div>平:</div>
+                  <div>{{ stockZsData.shz_ps }}</div>
+                </div>
+                <div class="text-green-500 flex justify-between">
+                  <div>跌:</div>
+                  <div>{{ stockZsData.shz_ds }}</div>
+                </div>
+                <div class="text-black flex justify-between">
+                  <div>涨跌:</div>
+                  <div :class="StyleColor(stockZsData.shz_zf)">{{ stockZsData.shz_zf }}</div>
+                </div>
+                <div class="text-black flex justify-between">
+                  <div>涨幅:</div>
+                  <div :class="StyleColor(stockZsData.shz_zfb)" class="pl-3">{{ stockZsData.shz_zfb }}%</div>
+                </div>
+
+              </div>
+            </template>
+            <div :class="StyleColor(stockZsData.shz_zf)">上证：<span>{{ stockZsData.shz }}</span></div>
+          </a-tooltip>
+          <a-tooltip placement="bottom" color="white">
+            <template #title>
+              <div class="container text-right">
+                <div class="text-red-500 flex justify-between">
+                  <div>涨:</div>
+                  <div>{{ stockZsData.sz_zs }}</div>
+                </div>
+                <div class="text-black flex justify-between">
+                  <div>平:</div>
+                  <div>{{ stockZsData.sz_ps }}</div>
+                </div>
+                <div class="text-green-500 flex justify-between">
+                  <div>跌:</div>
+                  <div>{{ stockZsData.sz_ds }}</div>
+                </div>
+                <div class="text-black flex justify-between">
+                  <div>涨跌:</div>
+                  <div :class="StyleColor(stockZsData.sz_zf)">{{ stockZsData.sz_zf }}</div>
+                </div>
+                <div class="text-black flex justify-between">
+                  <div>涨幅:</div>
+                  <div :class="StyleColor(stockZsData.sz_zfb)" class="pl-3">{{ stockZsData.sz_zfb }}%</div>
+                </div>
+
+              </div>
+            </template>
+            <div :class="StyleColor(stockZsData.shz_zf)">深证：<span>{{ stockZsData.sz }}</span></div>
+          </a-tooltip>
         </div>
       </div>
     </a-layout-header>
@@ -50,6 +107,7 @@ const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_4766848_85as6e2e8rl.js',
 });
 const stockZsData = ref({})
+const showPopover = ref(false)
 
 const menuVal = menuStore();
 const selectedKeys = computed({

@@ -56,8 +56,8 @@
             <p class="font-semibold text-xl" :class="chgColor()">{{ stock.chg }}%</p>
           </div>
         </div>
-        <div class="text-left font-light flex text-sm border-2 border-blue-200 rounded-lg w-3/4 h-20 m-4"
-             :class="borderColor()">
+        <div class="text-left font-light flex text-sm  w-3/4 h-20 m-4"
+             >
           <div v-for="(item, index) in stockInfo" :key="index" class="grid grid-cols-5 gap-4 text-center m-4">
             <div class="text-nowrap relative">
               <div class="flex hover:font-bold">

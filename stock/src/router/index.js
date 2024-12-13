@@ -31,6 +31,14 @@ const routes = [
         meta: {
             title: '涨停板'
         },
+    },
+    {
+        path: '/duanban',
+        name: 'duanban',
+        component: () => import('../components/duanbanIndex.vue'),
+        meta: {
+            title: '昨日涨停板'
+        },
     }
 ];
 
