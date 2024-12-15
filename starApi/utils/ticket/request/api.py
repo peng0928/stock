@@ -5,6 +5,8 @@ from PrSpider import Xpath
 import requests
 
 from loguru import logger
+
+from utils.client.mongoApi import MongoConn
 from utils.tools.index import to_yi, to_float_list, merge_md
 from functools import wraps
 
@@ -294,12 +296,21 @@ class RequestClient:
         response = self.session.get(url, params=params)
         json_data = response.json()
         json_data = json_data.get('data').get('diff') or {}
-        print(json_data)
         item = {
             "shz": json_data[0].get('f2'),
             "shz_zf": json_data[0].get('f4'),
+            "shz_zfb": json_data[0].get('f3'),
+            "shz_zfj": json_data[0].get('f6'),
+            "shz_zs": json_data[0].get('f104'),
+            "shz_ps": json_data[0].get('f106'),
+            "shz_ds": json_data[0].get('f105'),
             "sz": json_data[1].get('f2'),
             "sz_zf": json_data[1].get('f4'),
+            "sz_zfb": json_data[1].get('f3'),
+            "sz_zfj": json_data[1].get('f6'),
+            "sz_zs": json_data[1].get('f104'),
+            "sz_ps": json_data[1].get('f106'),
+            "sz_ds": json_data[1].get('f105'),
         }
         return json.dumps(item)
 
@@ -346,14 +357,16 @@ class RequestClient:
         return item
 
     @catch_exceptions
-    def stock_ZTPool(self):
+    def stock_ZTPool(self, days=0):
         """
         获取涨停板信息
         :return:
         """
         item = []
         url = "https://push2ex.eastmoney.com/getTopicZTPool"
-        date = datetime.datetime.now().strftime("%Y%m%d")
+        day = datetime.datetime.now()
+        yesterday = day - datetime.timedelta(days=days)
+        date = yesterday.strftime('%Y%m%d')
         params = {
             "cb": "",
             "ut": "7eea3edcaed734bea9cbfc24409ed989",
@@ -389,11 +402,29 @@ class RequestClient:
                 })
         return item
 
+    @catch_exceptions
+    def stock_dbcx(self):
+        """
+        断板查询
+        :return:
+        """
+        data = []
+        stock_data = self.stock_ZTPool(days=1)
+        for item in stock_data:
+            item_details = self.stock_get(item.get('code'))
+            item.update({"details": item_details})
+            print(item)
+            data.append(item)
+        return data
+
 
 def main():
+    day = datetime.datetime.now().strftime('%Y%m%d')
+    MongoClient = MongoConn(db='Stock')
     client = RequestClient()
     # stock_data = client.stock_details('0.002131')
-    stock_data = client.stock_zs()
+    stock_data = client.stock_dbcx()
+    MongoClient.insert('stock_dbcx', {"date": day, "data": stock_data})
     print(stock_data)
 
 

@@ -83,8 +83,21 @@ async def stock_bk(request: Request, ):
 
 
 @router.post("/stock/ztb")  # 涨停板
-async def stock_ztb(request: Request ):
+async def stock_ztb(request: Request):
     data = ReqClient.stock_ZTPool()
+    return JSONResponse(status_code=200, content=data)
+
+
+@router.post("/stock/duanban")  # 涨停板
+async def stock_duanban(request: Request, item: dict):
+    date = item.get("item")
+    date = date if date else datetime.datetime.now().strftime('%Y%m%d')
+    MongoClient = MongoConn(db='Stock')
+    data = MongoClient.find_query('stock_dbcx', find_query={"date": date})
+    if data:
+        data = data[0].get("data")
+    else:
+        data = ReqClient.stock_dbcx()
     return JSONResponse(status_code=200, content=data)
 
 
