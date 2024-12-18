@@ -409,12 +409,14 @@ class RequestClient:
         :return:
         """
         data = []
-        stock_data = self.stock_ZTPool(days=1)
+        stock_data = self.stock_ZTPool(days=3)
         for item in stock_data:
             item_details = self.stock_get(item.get('code'))
             item.update({"details": item_details})
             print(item)
             data.append(item)
+        else:
+            print("无数据")
         return data
 
 

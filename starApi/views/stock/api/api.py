@@ -94,6 +94,7 @@ async def stock_duanban(request: Request, item: dict):
     date = date if date else datetime.datetime.now().strftime('%Y%m%d')
     MongoClient = MongoConn(db='Stock')
     data = MongoClient.find_query('stock_dbcx', find_query={"date": date})
+    print(data)
     if data:
         data = data[0].get("data")
     else:
