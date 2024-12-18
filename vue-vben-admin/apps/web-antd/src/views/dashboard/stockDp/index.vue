@@ -21,15 +21,14 @@ const chartTabs: TabOption[] = [
 </script>
 
 <template>
-  <div class="p-5 ">
-    <AnalysisChartsTabs :tabs="chartTabs" class="mt-5 ">
+  <div class="p-5">
+    <AnalysisChartsTabs :tabs="chartTabs" class="mt-5">
       <template #trends>
-        <div>1</div>
         <dpanEcharts/>
       </template>
-      <template #visits>
-<!--        <AnalyticsVisits/>-->
-      </template>
+<!--      <template #visits>-->
+<!--&lt;!&ndash;        <AnalyticsVisits/>&ndash;&gt;-->
+<!--      </template>-->
     </AnalysisChartsTabs>
   </div>
 </template>

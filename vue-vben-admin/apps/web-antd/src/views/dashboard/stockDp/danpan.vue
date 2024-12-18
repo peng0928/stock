@@ -6,12 +6,14 @@ import {
   type EchartsUIType,
   useEcharts,
 } from '@vben/plugins/echarts';
+import * as console from "console";
 
 const chartRef = ref<EchartsUIType>();
 const {renderEcharts} = useEcharts(chartRef);
 
 const upColor = 'red';
 const downColor = 'green';
+const option = ref();
 
 function splitData(rawData) {
   let categoryData = [];
@@ -351,387 +353,249 @@ const StockKline = async () => {
     // 解析响应数据
     const query = await response.json();
     rawData.value = query;
-    var data = splitData(rawData.value);
-    console.log(data, calculateMA(5, data));
-
-    console.log(calculateMA(5, data));
-    var option = {
-      animation: false,
-      legend: {
-        data: ['日k', 'MA5', 'MA10', 'MA20', 'MA30'],
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'cross',
-          label: {
-            show: false // 不显示Y轴的刻度信息
-          },
-        },
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        textStyle: {
-          color: '#000'
-        },
-      },
-      visualMap: {
-        show: false,
-        seriesIndex: 5,
-        dimension: 2,
-        pieces: [
-          {
-            value: 1,
-            color: downColor
-          },
-          {
-            value: -1,
-            color: upColor
-          }
-        ]
-      },
-      grid: [
-        {
-          left: '10%',
-          right: '8%',
-          height: '50%'
-        },
-        {
-          left: '10%',
-          right: '8%',
-          top: '80%',
-          height: '15%'
-        }
-      ],
-      xAxis: [
-        {
-          type: 'category',
-          data: data.categoryData,
-          boundaryGap: false,
-          axisLine: {onZero: false},
-          splitLine: {show: false},
-          min: 'dataMin',
-          max: 'dataMax',
-          axisPointer: {
-            z: 100
-          }
-        },
-        {
-          type: 'category',
-          gridIndex: 1,
-          data: data.categoryData,
-          boundaryGap: false,
-          axisLine: {onZero: false},
-          axisTick: {show: false},
-          splitLine: {show: false},
-          axisLabel: {show: false},
-          min: 'dataMin',
-          max: 'dataMax'
-        }
-      ],
-      yAxis: [
-        {
-          scale: true,
-          splitArea: {
-            show: true
-          }
-        },
-        {
-          scale: true,
-          gridIndex: 1,
-          splitNumber: 2,
-          axisLabel: {show: false},
-          axisLine: {show: false},
-          axisTick: {show: false},
-          splitLine: {show: false}
-        }
-      ],
-      dataZoom: [
-        {
-          type: 'inside',
-          xAxisIndex: [0, 1],
-          startValue: rawData.value.length - 60, // 展示后10个数据的索引
-          endValue: rawData.value.length // 展示全部数据
-        }
-      ],
-      series: [
-        {
-          name: '日k',
-          type: 'candlestick',
-          data: data.values,
-          itemStyle: {
-            color: upColor,
-            color0: downColor,
-            borderColor: undefined,
-            borderColor0: undefined
-          }
-        },
-        {
-          name: 'MA5',
-          type: 'line',
-          data: calculateMA(5, data),
-          smooth: true,
-          symbol: "none",//无标记图案
-          lineStyle: {
-            width: 1,
-            color: 'black'
-          },
-          itemStyle: {
-            color: 'black' // 设置MA5点的颜色为红色
-          }
-        },
-        {
-          name: 'MA10',
-          type: 'line',
-          data: calculateMA(10, data),
-          symbol: "none",//无标记图案
-          smooth: true,
-          lineStyle: {
-            width: 1,
-            color: '#9932CC'
-          }, itemStyle: {
-            color: '#9932CC' // 设置MA5点的颜色为红色
-          }
-        },
-        {
-          name: 'MA20',
-          type: 'line',
-          data: calculateMA(20, data),
-          symbol: "none",//无标记图案
-          smooth: true,
-          lineStyle: {
-            width: 1,
-            color: '#FF8C00'
-          }, itemStyle: {
-            color: '#FF8C00' // 设置MA5点的颜色为红色
-          }
-        },
-        {
-          name: 'MA30',
-          type: 'line',
-          data: calculateMA(30, data),
-          symbol: "none",//无标记图案
-          smooth: true,
-          lineStyle: {
-            width: 1,
-            color: '#4169E1'
-          }, itemStyle: {
-            color: '#4169E1' // 设置MA5点的颜色为红色
-          }
-        },
-        {
-          name: '成交量',
-          type: 'bar',
-          xAxisIndex: 1,
-          yAxisIndex: 1,
-          data: data.volumes
-        }
-      ], axisPointer: {
-        link: [
-          {
-            xAxisIndex: 'all'
-          }
-        ],
-        label: {
-          backgroundColor: '#777'
-        }
-      },
-    };
-    renderEcharts(option);
+    initChart()
   } catch (error) {
     console.log('There was an error!', error);
   }
 };
-var data = splitData(rawData.value);
-var option = {
-  animation: false,
-  legend: {
-    data: ['日k', 'MA5', 'MA10', 'MA20', 'MA30'],
-  },
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: {
-      type: 'cross',
-      label: {
-        show: false // 不显示Y轴的刻度信息
-      },
-    },
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    textStyle: {
-      color: '#000'
-    },
-  },
-  visualMap: {
-    show: false,
-    seriesIndex: 5,
-    dimension: 2,
-    pieces: [
-      {
-        value: 1,
-        color: downColor
-      },
-      {
-        value: -1,
-        color: upColor
+let currentHoverIndex: number
+
+function formatterTooltip(params: any) {
+  let TooltipStr = ""
+  const valueMap = {
+    "日k": 2,
+    "MA5": 1,
+    "MA10": 1,
+    "MA20": 1,
+    "MA30": 1,
+    "成交量": 1,
+  };
+  const title = params[0].name;
+  for (let i = 0; i < params.length; i++) {
+    const p = params[i];
+    const seriesName = p.seriesName;
+    let value = p.data[valueMap[seriesName]] || p.data || "";
+
+    if (value && value !== '-') {
+      try {
+        value = parseFloat(value).toLocaleString();
+      } catch (e) {
+        value = ""
       }
-    ]
-  },
-  grid: [
-    {
-      left: '10%',
-      right: '8%',
-      height: '50%'
-    },
-    {
-      left: '10%',
-      right: '8%',
-      top: '80%',
-      height: '15%'
+      TooltipStr = TooltipStr + `
+        <tr>
+        <td>${p.marker}${p.seriesName}</td>
+        <td class="text-base pl-8">${value}</td>
+        </tr>`
     }
-  ],
-  xAxis: [
-    {
-      type: 'category',
-      data: data.categoryData,
-      boundaryGap: false,
-      axisLine: {onZero: false},
-      splitLine: {show: false},
-      min: 'dataMin',
-      max: 'dataMax',
+  }
+  return `<table class="tooltip-tab">
+        <tr>
+        <td  class="text-lg">
+        ${title}
+        </td>
+        <tr>
+
+        ${TooltipStr}
+        </table>`
+}
+
+function initChart() {
+  var data = splitData(rawData.value);
+  option.value = {
+    animation: false,
+    legend: {
+      data: ['日k', 'MA5', 'MA10', 'MA20', 'MA30'],
+    },
+    tooltip: {
+      trigger: 'axis',
       axisPointer: {
-        z: 100
-      }
-    },
-    {
-      type: 'category',
-      gridIndex: 1,
-      data: data.categoryData,
-      boundaryGap: false,
-      axisLine: {onZero: false},
-      axisTick: {show: false},
-      splitLine: {show: false},
-      axisLabel: {show: false},
-      min: 'dataMin',
-      max: 'dataMax'
-    }
-  ],
-  yAxis: [
-    {
-      scale: true,
-      splitArea: {
-        show: true
-      }
-    },
-    {
-      scale: true,
-      gridIndex: 1,
-      splitNumber: 2,
-      axisLabel: {show: false},
-      axisLine: {show: false},
-      axisTick: {show: false},
-      splitLine: {show: false}
-    }
-  ],
-  dataZoom: [
-    {
-      type: 'inside',
-      xAxisIndex: [0, 1],
-      startValue: rawData.length - 60, // 展示后10个数据的索引
-      endValue: rawData.length // 展示全部数据
-    }
-  ],
-  series: [
-    {
-      name: '日k',
-      type: 'candlestick',
-      data: data.values,
-      itemStyle: {
-        color: upColor,
-        color0: downColor,
-        borderColor: undefined,
-        borderColor0: undefined
-      }
-    },
-    {
-      name: 'MA5',
-      type: 'line',
-      data: calculateMA(5, data),
-      smooth: true,
-      symbol: "none",//无标记图案
-      lineStyle: {
-        width: 1,
-        color: 'black'
+        type: 'cross',
+        label: {
+          show: false // 不显示Y轴的刻度信息
+        },
       },
-      itemStyle: {
-        color: 'black' // 设置MA5点的颜色为红色
-      }
+      borderWidth: 1,
+      borderColor: '#ccc',
+      padding: 10,
+      textStyle: {
+        color: '#000'
+      },
+      formatter: (params) => formatterTooltip(params)
     },
-    {
-      name: 'MA10',
-      type: 'line',
-      data: calculateMA(10, data),
-      symbol: "none",//无标记图案
-      smooth: true,
-      lineStyle: {
-        width: 1,
-        color: '#9932CC'
-      }, itemStyle: {
-        color: '#9932CC' // 设置MA5点的颜色为红色
-      }
+    visualMap: {
+      show: false,
+      seriesIndex: 5,
+      dimension: 2,
+      pieces: [
+        {
+          value: 1,
+          color: downColor
+        },
+        {
+          value: -1,
+          color: upColor
+        }
+      ]
     },
-    {
-      name: 'MA20',
-      type: 'line',
-      data: calculateMA(20, data),
-      symbol: "none",//无标记图案
-      smooth: true,
-      lineStyle: {
-        width: 1,
-        color: '#FF8C00'
-      }, itemStyle: {
-        color: '#FF8C00' // 设置MA5点的颜色为红色
-      }
-    },
-    {
-      name: 'MA30',
-      type: 'line',
-      data: calculateMA(30, data),
-      symbol: "none",//无标记图案
-      smooth: true,
-      lineStyle: {
-        width: 1,
-        color: '#4169E1'
-      }, itemStyle: {
-        color: '#4169E1' // 设置MA5点的颜色为红色
-      }
-    },
-    {
-      name: '成交量',
-      type: 'bar',
-      xAxisIndex: 1,
-      yAxisIndex: 1,
-      data: data.volumes
-    }
-  ], axisPointer: {
-    link: [
+    grid: [
       {
-        xAxisIndex: 'all'
+        left: '10%',
+        right: '10%',
+        height: '70%'
+      },
+      {
+        left: '10%',
+        right: '10%',
+        top: '85%',
+        height: '10%'
       }
     ],
-    label: {
-      backgroundColor: '#777'
-    }
-  },
-};
+    xAxis: [
+      {
+        type: 'category',
+        data: data.categoryData,
+        boundaryGap: false,
+        axisLine: {onZero: false},
+        splitLine: {show: false},
+        min: 'dataMin',
+        max: 'dataMax',
+        axisPointer: {
+          z: 100
+        }
+      },
+      {
+        type: 'category',
+        gridIndex: 1,
+        data: data.categoryData,
+        boundaryGap: false,
+        axisLine: {onZero: false},
+        axisTick: {show: false},
+        splitLine: {show: false},
+        axisLabel: {show: false},
+        min: 'dataMin',
+        max: 'dataMax'
+      }
+    ],
+    yAxis: [
+      {
+        scale: true,
+        splitArea: {
+          show: true
+        }
+      },
+      {
+        scale: true,
+        gridIndex: 1,
+        splitNumber: 2,
+        axisLabel: {show: false},
+        axisLine: {show: false},
+        axisTick: {show: false},
+        splitLine: {show: false}
+      }
+    ],
+    dataZoom: [
+      {
+        type: 'inside',
+        xAxisIndex: [0, 1],
+        startValue: rawData.value.length - 60, // 展示后10个数据的索引
+        endValue: rawData.value.length, // 展示全部数据
+      }
+    ],
+    series: [
+      {
+        name: '日k',
+        type: 'candlestick',
+        data: data.values,
+        itemStyle: {
+          color: upColor,
+          color0: downColor,
+          borderColor: undefined,
+          borderColor0: undefined
+        }
+      },
+      {
+        name: 'MA5',
+        type: 'line',
+        data: calculateMA(5, data),
+        smooth: true,
+        symbol: "none",//无标记图案
+        lineStyle: {
+          width: 1,
+          color: 'black'
+        },
+        itemStyle: {
+          color: 'black' // 设置MA5点的颜色为红色
+        }
+      },
+      {
+        name: 'MA10',
+        type: 'line',
+        data: calculateMA(10, data),
+        symbol: "none",//无标记图案
+        smooth: true,
+        lineStyle: {
+          width: 1,
+          color: '#9932CC'
+        }, itemStyle: {
+          color: '#9932CC' // 设置MA5点的颜色为红色
+        }
+      },
+      {
+        name: 'MA20',
+        type: 'line',
+        data: calculateMA(20, data),
+        symbol: "none",//无标记图案
+        smooth: true,
+        lineStyle: {
+          width: 1,
+          color: '#FF8C00'
+        }, itemStyle: {
+          color: '#FF8C00' // 设置MA5点的颜色为红色
+        }
+      },
+      {
+        name: 'MA30',
+        type: 'line',
+        data: calculateMA(30, data),
+        symbol: "none",//无标记图案
+        smooth: true,
+        lineStyle: {
+          width: 1,
+          color: '#4169E1'
+        }, itemStyle: {
+          color: '#4169E1' // 设置MA5点的颜色为红色
+        }
+      },
+      {
+        name: '成交量',
+        type: 'bar',
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        data: data.volumes
+      }
+    ], axisPointer: {
+      link: [
+        {
+          xAxisIndex: 'all'
+        }
+      ],
+      label: {
+        backgroundColor: '#777'
+      }
+    },
+  };
+  renderEcharts(option.value);
+
+}
+
 
 onMounted(() => {
+  // initChart()
   StockKline()
-  // renderEcharts(option);
 });
 </script>
 
 <template>
-  <EchartsUI ref="chartRef" style="height: 350px"/>
+  <EchartsUI ref="chartRef" style="height: 500px"/>
 </template>
