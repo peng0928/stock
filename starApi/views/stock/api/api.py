@@ -7,6 +7,7 @@ from fastapi.responses import ORJSONResponse, JSONResponse
 from fastapi.responses import StreamingResponse
 
 from utils.ticket.request.api import *
+from utils.ticket.request.tool.ticket_tool import get_datetime, mongo_data
 from views.stock.model.index import *
 
 ReqClient = RequestClient()
@@ -19,6 +20,7 @@ router = APIRouter(
 
 sse_time = 0.614
 media_type = "text/event-stream"
+MongoClient = MongoConn(db='Stock')
 
 
 @router.post("/stock/get")
@@ -91,14 +93,17 @@ async def stock_ztb(request: Request):
 @router.post("/stock/duanban")  # 涨停板
 async def stock_duanban(request: Request, item: dict):
     date = item.get("item")
-    date = date if date else datetime.datetime.now().strftime('%Y%m%d')
-    MongoClient = MongoConn(db='Stock')
-    data = MongoClient.find_query('stock_dbcx', find_query={"date": date})
-    print(data)
-    if data:
-        data = data[0].get("data")
-    else:
-        data = ReqClient.stock_dbcx()
+    date = date if date else datetime.datetime.now().strftime('%Y-%m-%d')
+    data = MongoClient.find_query('stock_duanban', find_query={"date": date})
+    data = mongo_data(data)
+    return JSONResponse(status_code=200, content=data)
+
+
+@router.post("/stock/kline")  # kline
+async def stock_kline(request: Request, item: dict):
+    date_now = get_datetime()
+    data = MongoClient.find_query('stock_kline', find_query={"date": date_now})
+    data = mongo_data(data)
     return JSONResponse(status_code=200, content=data)
 
 

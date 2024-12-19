@@ -7,6 +7,7 @@ import requests
 from loguru import logger
 
 from utils.client.mongoApi import MongoConn
+from utils.ticket.request.tool.ticket_tool import get_previous_workday
 from utils.tools.index import to_yi, to_float_list, merge_md
 from functools import wraps
 
@@ -357,15 +358,39 @@ class RequestClient:
         return item
 
     @catch_exceptions
-    def stock_ZTPool(self, days=0):
+    def stock_kline(self, code):
+        """
+        获取板块信息
+        :return:
+        """
+        url = "https://push2his.eastmoney.com/api/qt/stock/kline/get"
+        params = {
+            "cb": "",
+            "secid": code,
+            "ut": "",
+            "fields1": "f1,f2,f3,f4,f5,f6",
+            "fields2": "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61",
+            "klt": "101",
+            "fqt": "1",
+            "end": "20500101",
+            "lmt": "1000000",
+            "_": ""
+        }
+        response = self.session.get(url, params=params)
+        json_data = response.json()
+        json_data = json_data.get('data').get('klines') or {}
+        json_data = [i.split(',') for i in json_data]
+        return json_data
+
+    @catch_exceptions
+    def stock_ZTPool(self, days=1):
         """
         获取涨停板信息
         :return:
         """
         item = []
         url = "https://push2ex.eastmoney.com/getTopicZTPool"
-        day = datetime.datetime.now()
-        yesterday = day - datetime.timedelta(days=days)
+        yesterday = get_previous_workday(days)
         date = yesterday.strftime('%Y%m%d')
         params = {
             "cb": "",
@@ -403,30 +428,27 @@ class RequestClient:
         return item
 
     @catch_exceptions
-    def stock_dbcx(self):
+    def stock_dbcx(self, days=1):
         """
         断板查询
         :return:
         """
         data = []
-        stock_data = self.stock_ZTPool(days=3)
+        stock_data = self.stock_ZTPool(days=days)
         for item in stock_data:
             item_details = self.stock_get(item.get('code'))
             item.update({"details": item_details})
-            print(item)
             data.append(item)
-        else:
-            print("无数据")
         return data
 
 
 def main():
-    day = datetime.datetime.now().strftime('%Y%m%d')
-    MongoClient = MongoConn(db='Stock')
+    # day = datetime.datetime.now().strftime('%Y%m%d')
+    # MongoClient = MongoConn(db='Stock')
     client = RequestClient()
     # stock_data = client.stock_details('0.002131')
-    stock_data = client.stock_dbcx()
-    MongoClient.insert('stock_dbcx', {"date": day, "data": stock_data})
+    stock_data = client.stock_kline('1.000001')
+    # MongoClient.insert('stock_dbcx', {"date": day, "data": stock_data})
     print(stock_data)
 
 

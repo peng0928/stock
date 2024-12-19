@@ -24,10 +24,10 @@ const chartTabs: TabOption[] = [
   <div class="p-5">
     <AnalysisChartsTabs :tabs="chartTabs" class="mt-5">
       <template #trends>
-        <dpanEcharts zsType="1.000001"/>
+        <dpanEcharts zsType="shz"/>
       </template>
       <template #visits>
-        <dpanEcharts zsType="0.399001"/>
+        <dpanEcharts zsType="sz"/>
       </template>
     </AnalysisChartsTabs>
   </div>

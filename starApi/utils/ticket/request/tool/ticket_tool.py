@@ -1,3 +1,9 @@
+from datetime import datetime, timedelta
+
+from dateutil.relativedelta import relativedelta
+from dateutil.rrule import FR
+
+
 def get_seat_type(seats):
     for seat in seats:
         return seat.get('id')
@@ -81,3 +87,27 @@ def comfirm_order_data(item):
     oldPassengerStr = '_'.join(oldPassengerList)
     return {"TicketStr": TicketStr, "oldStr": oldPassengerStr, "tour_flag": tour_flag, 'purpose_codes': purpose_codes,
             "leftTicketStr": leftTicketStr, "train_location": train_location, "key_check": key_check}
+
+
+def get_datetime(days=0, t=0):
+    if t == 0:
+        fom = '%Y-%m-%d'
+    else:
+        fom = '%Y-%m-%d %H:%M:%S'
+    return (datetime.now() - relativedelta(days=days)).strftime(fom)
+
+
+def mongo_data(data, default='_id'):
+    return_data = [{k: v for k, v in d.items() if k != default} for d in data]
+    if len(return_data) == 1 and isinstance(return_data, list):
+        return return_data[0]
+    return return_data
+
+def get_previous_workday(day=1):
+    current_date = datetime.now()
+    previous_date = current_date - timedelta(days=day)
+    while previous_date.weekday() >= 5:  # 周六为5，周日为6
+        previous_date -= timedelta(days=1)
+    return previous_date.date()
+
+# 使用函数

@@ -362,12 +362,12 @@ const StockKline = async () => {
         'Content-Type': 'application/json', // 设置请求体格式为 JSON
       },
       body: JSON.stringify({
-        code: props.zsType
+        code: ''
       }),
     });
     // 解析响应数据
     const query = await response.json();
-    rawData.value = query;
+    rawData.value = query[props.zsType];
     initChart()
   } catch (error) {
     console.log('There was an error!', error);

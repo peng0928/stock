@@ -46,6 +46,9 @@
     "echarts": "^5.5.1",
     "pinia": "catalog:",
     "vue": "catalog:",
-    "vue-router": "catalog:"
+    "vue-router": "catalog:",
+    "vxe-pc-ui": "4.3.38",
+    "vxe-table": "4.9.31",
+    "xe-utils": "^3.5.32"
   }
 }

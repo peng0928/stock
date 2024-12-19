@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="940bba2c-7841-4a87-b61b-eb8444101b01" name="Default Changelist" comment="更新">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/starApi/scheduleTasks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/store/func.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starApi/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starApi/.idea/starApi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/.idea/starApi.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starApi/utils/ticket/request/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/utils/ticket/request/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starApi/utils/ticket/request/tool/ticket_tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/utils/ticket/request/tool/ticket_tool.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starApi/views/stock/api/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/views/stock/api/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/bootstrap.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/bootstrap.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/danpan.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/danpan.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,10 +33,36 @@
       </list>
     </option>
   </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="MIXED" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;peng0928&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:peng0928/stock.git&quot;,
+    &quot;accountId&quot;: &quot;f767fee9-fe5f-46b8-9b32-321bf7e15fbf&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2pi4LTTeaG41KLtZoESbpWP71o0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -29,21 +71,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/vue-stock/src" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.path.for.package.eslint" value="project" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="ts.external.directory.path" value="D:\PyCharm 2020.3.5\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "E:/桌面/Github/github/stock/vue-vben-admin/apps/web-antd/src/store",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "E:\\桌面\\Github\\github\\stock\\vue-vben-admin\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\桌面\Github\github\stock\vue-vben-admin\apps\web-antd\src\store" />
       <recent name="E:\桌面\Github\github\stock\vue-stock\src" />
       <recent name="E:\桌面\Github\github\stock\vue-quasar-stock" />
     </key>
@@ -51,6 +96,7 @@
   <component name="RunManager" selected="Python.api">
     <configuration name="api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="stock" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -73,6 +119,7 @@
     </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="stock" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -100,6 +147,14 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.180" />
+        <option value="bundled-python-sdk-85c76a3b01b3-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.180" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -110,7 +165,10 @@
       <updated>1733235540488</updated>
       <workItem from="1733235566030" duration="40900000" />
       <workItem from="1734356199436" duration="3031000" />
-      <workItem from="1734521913258" duration="5369000" />
+      <workItem from="1734521913258" duration="5967000" />
+      <workItem from="1734611768119" duration="77000" />
+      <workItem from="1734611861119" duration="3719000" />
+      <workItem from="1734616694567" duration="6918000" />
     </task>
     <task id="LOCAL-00001" summary="更新">
       <created>1733240733727</created>
@@ -184,12 +242,29 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="gx" />
     <MESSAGE value="更新" />
     <option name="LAST_COMMIT_MESSAGE" value="更新" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue</url>
+          <line>13</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue</url>
+          <line>33</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/stock$main.coverage" NAME="main Coverage Results" MODIFIED="1733315548619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/starApi" />
