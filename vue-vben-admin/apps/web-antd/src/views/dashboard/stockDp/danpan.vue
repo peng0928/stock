@@ -1,15 +1,30 @@
 <script lang="ts" setup>
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, computed} from 'vue';
 import * as echarts from 'echarts';
 import {
   EchartsUI,
   type EchartsUIType,
   useEcharts,
 } from '@vben/plugins/echarts';
-import * as console from "console";
 
 const chartRef = ref<EchartsUIType>();
 const {renderEcharts} = useEcharts(chartRef);
+
+interface BasicOption {
+  code: string;
+}
+
+interface Props {
+  zsType: BasicOption[];
+}
+
+defineOptions({
+  name: 'AnalysisChartsTabs',
+});
+
+const props = withDefaults(defineProps<Props>(), {
+  zsType: () => [],
+});
 
 const upColor = 'red';
 const downColor = 'green';
@@ -347,7 +362,7 @@ const StockKline = async () => {
         'Content-Type': 'application/json', // 设置请求体格式为 JSON
       },
       body: JSON.stringify({
-        code: '1.000001'
+        code: props.zsType
       }),
     });
     // 解析响应数据
@@ -358,7 +373,6 @@ const StockKline = async () => {
     console.log('There was an error!', error);
   }
 };
-let currentHoverIndex: number
 
 function formatterTooltip(params: any) {
   let TooltipStr = ""
@@ -500,6 +514,7 @@ function initChart() {
         xAxisIndex: [0, 1],
         startValue: rawData.value.length - 60, // 展示后10个数据的索引
         endValue: rawData.value.length, // 展示全部数据
+        minValueSpan: 50,
       }
     ],
     series: [
@@ -588,7 +603,6 @@ function initChart() {
   renderEcharts(option.value);
 
 }
-
 
 onMounted(() => {
   // initChart()

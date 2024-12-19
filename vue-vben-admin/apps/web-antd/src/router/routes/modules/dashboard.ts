@@ -42,6 +42,15 @@ const routes: RouteRecordRaw[] = [
           title: '大盘',
         },
       },
+      {
+        name: '断板',
+        path: '/duanban',
+        component: () => import('#/views/dashboard/stockGdb/index.vue'),
+        meta: {
+          icon: 'lucide-lab:stairs-arrow-down-left',
+          title: '断板',
+        },
+      },
     ],
   },
 ];
