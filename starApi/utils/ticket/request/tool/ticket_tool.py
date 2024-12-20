@@ -97,11 +97,22 @@ def get_datetime(days=0, t=0):
     return (datetime.now() - relativedelta(days=days)).strftime(fom)
 
 
+def is_before_3pm():
+    # 获取当前时间
+    now = datetime.now()
+    # 判断当前时间是否在下午3点之前
+    if now.hour > 15:  # 15代表24小时制的下午3点
+        return True
+    else:
+        return False
+
+
 def mongo_data(data, default='_id'):
     return_data = [{k: v for k, v in d.items() if k != default} for d in data]
     if len(return_data) == 1 and isinstance(return_data, list):
         return return_data[0]
     return return_data
+
 
 def get_previous_workday(day=1):
     current_date = datetime.now()

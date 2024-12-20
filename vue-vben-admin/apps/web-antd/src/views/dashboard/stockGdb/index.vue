@@ -4,6 +4,10 @@ import XEUtils from 'xe-utils';
 import type {VxeColumnPropTypes} from 'vxe-table';
 import func from '../../../store/func';
 
+const loading = ref(true);
+const columnConfig = {
+      resizable: true
+    };
 const convertToChinese = func.convertToChinese;
 const splitString = func.splitString;
 
@@ -22,6 +26,7 @@ const StockGetduanban = async () => {
     });
     // 解析响应数据
     const query = await response.json();
+    loading.value = false;
     tableData.data = query.data;
   } catch (error) {
     console.log('There was an error!', error);
@@ -56,53 +61,61 @@ const sortNameMethod = ({row}) => {
     <div class="card-box w-full px-4 pb-5 pt-3">
       111
     </div>
-    <div class="card-box w-full px-4 pb-5 pt-3 mt-1">
-      <vxe-table :data="tableData.data" :row-config="{isHover: true}" height="650">
-        <vxe-column type="seq" width="100" fixed="left"></vxe-column>
-        <vxe-column field="code" title="代码" width="150"></vxe-column>
-        <vxe-column field="name" title="名称" width="150"></vxe-column>
-        <vxe-column field="jzd" title="今涨幅" width="150" sortable :sort-by="sortNameMethod">
+    <div class="w-full pb-5 pt-3 mt-1">
+      <vxe-table :data="tableData.data" :row-config="{isHover: true}" height="600"
+                 :loading="loading"  :column-config="columnConfig"
+      >
+        <vxe-column type="seq" width="auto" fixed="left"></vxe-column>
+        <vxe-column field="code" title="代码" min-width="70"></vxe-column>
+        <vxe-column field="name" title="名称" min-width="70">
+          <template #default="{ row }">
+            <span :class="ClassColor(row.details.chg)">
+            {{ row.name }}
+          </span>
+          </template>
+        </vxe-column>
+        <vxe-column field="jzd" title="今涨幅" min-width="70" sortable :sort-by="sortNameMethod">
           <template #default="{ row }">
             <span :class="ClassColor(row.details.chg)">
             {{ (row.details.chg).toFixed(2) }}
           </span>
           </template>
         </vxe-column>
-        <vxe-column field="zd" title="涨幅" width="100" :formatter="formatterNum"
+        <vxe-column field="zd" title="涨幅" min-width="70" :formatter="formatterNum"
                     sortable></vxe-column>
-        <vxe-column field="zxj" title="现价" width="100" sortable></vxe-column>
-        <vxe-column field="hs" title="换手" width="100" :formatter="formatterNum"
+        <vxe-column field="zxj" title="现价" min-width="70" sortable></vxe-column>
+        <vxe-column field="hs" title="换手" min-width="70" :formatter="formatterNum"
                     sortable></vxe-column>
-        <vxe-column field="fbjj" title="封板基金" width="150" sortable>
+        <vxe-column field="fbjj" title="封板基金" min-width="70" sortable>
           <template #default="{ row }">
             <span>
             {{ convertToChinese(row.fbjj) }}
           </span>
           </template>
         </vxe-column>
-        <vxe-column field="fbt" title="首板时间" width="150">
+        <vxe-column field="fbt" title="首板时间" min-width="80">
           <template #default="{ row }">
           <span>
             {{ splitString(row.fbt) }}
           </span>
           </template>
         </vxe-column>
-        <vxe-column field="lbt" title="最后封板时间" width="150">
+        <vxe-column field="lbt" title="最后封板时间" min-width="80">
           <template #default="{ row }">
          <span>
            {{ splitString(row.lbt) }}
           </span>
           </template>
         </vxe-column>
-        <vxe-column field="zbcs" title="炸板数" width="100"></vxe-column>
-        <vxe-column field="zttj" title="涨停统计" width="150">
+        <vxe-column field="zbcs" title="炸板数" min-width="70"></vxe-column>
+        <vxe-column field="zttj" title="涨停统计" min-width="80">
           <template #default="{ row }">
             <span :class="ClassColor()"> {{ row.zttj.ct }} </span>
             <span> / </span>
             <span :class="ClassColor()">{{ row.zttj.days }} </span>
           </template>
         </vxe-column>
-        <vxe-column field="lbs" title="连扳数" width="auto" sortable>
+        <vxe-column field="lbs" title="连扳数" min-width="auto" sortable>
           <template #default="{ row }">
             <span :class="StyleColor((row.lbs).toFixed(2), 5)">
             {{ row.lbs }}
