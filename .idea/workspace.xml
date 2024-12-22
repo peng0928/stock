@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="940bba2c-7841-4a87-b61b-eb8444101b01" name="Default Changelist" comment="更新">
-      <change afterPath="$PROJECT_DIR$/starApi/scheduleTasks.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/store/func.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starApi/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starApi/.idea/starApi.iml" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/.idea/starApi.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starApi/utils/ticket/request/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/utils/ticket/request/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starApi/utils/ticket/request/tool/ticket_tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/utils/ticket/request/tool/ticket_tool.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/starApi/views/stock/api/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/views/stock/api/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/bootstrap.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/bootstrap.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/danpan.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/danpan.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockDp/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-vben-admin/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/pnpm-lock.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="940bba2c-7841-4a87-b61b-eb8444101b01" name="Default Changelist" comment="更新" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -168,7 +153,7 @@
       <workItem from="1734521913258" duration="5967000" />
       <workItem from="1734611768119" duration="77000" />
       <workItem from="1734611861119" duration="3719000" />
-      <workItem from="1734616694567" duration="6918000" />
+      <workItem from="1734616694567" duration="7195000" />
     </task>
     <task id="LOCAL-00001" summary="更新">
       <created>1733240733727</created>
