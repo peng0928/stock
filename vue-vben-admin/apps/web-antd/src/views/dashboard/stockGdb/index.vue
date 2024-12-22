@@ -3,11 +3,15 @@ import {onMounted, reactive, ref} from 'vue';
 import XEUtils from 'xe-utils';
 import type {VxeColumnPropTypes} from 'vxe-table';
 import func from '../../../store/func';
+import {VxeUI} from 'vxe-table';
+import { preferencesManager } from '@vben/preferences';
+
+VxeUI.setTheme(preferencesManager.state.theme.mode);
 
 const loading = ref(true);
 const columnConfig = {
-      resizable: true
-    };
+  resizable: true
+};
 const convertToChinese = func.convertToChinese;
 const splitString = func.splitString;
 
@@ -63,7 +67,7 @@ const sortNameMethod = ({row}) => {
     </div>
     <div class="w-full pb-5 pt-3 mt-1">
       <vxe-table :data="tableData.data" :row-config="{isHover: true}" height="600"
-                 :loading="loading"  :column-config="columnConfig"
+                 :loading="loading" :column-config="columnConfig"
       >
         <vxe-column type="seq" width="auto" fixed="left"></vxe-column>
         <vxe-column field="code" title="代码" min-width="70"></vxe-column>
