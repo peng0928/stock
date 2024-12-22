@@ -1,7 +1,7 @@
-import type { RouteRecordRaw } from 'vue-router';
+import type {RouteRecordRaw} from 'vue-router';
 
-import { BasicLayout } from '#/layouts';
-import { $t } from '#/locales';
+import {BasicLayout} from '#/layouts';
+import {$t} from '#/locales';
 
 const routes: RouteRecordRaw[] = [
   {
@@ -49,6 +49,15 @@ const routes: RouteRecordRaw[] = [
         meta: {
           icon: 'lucide-lab:stairs-arrow-down-left',
           title: '断板',
+        },
+      },
+      {
+        name: '板块',
+        path: '/bankuan',
+        component: () => import('#/views/dashboard/bankuan/index.vue'),
+        meta: {
+          icon: 'proicons:component',
+          title: '板块',
         },
       },
     ],

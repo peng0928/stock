@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="940bba2c-7841-4a87-b61b-eb8444101b01" name="Default Changelist" comment="更新" />
+    <list default="true" id="940bba2c-7841-4a87-b61b-eb8444101b01" name="Default Changelist" comment="更新">
+      <change afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/bankuan/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starApi/scheduleTasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/scheduleTasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/starApi/utils/ticket/request/tool/ticket_tool.py" beforeDir="false" afterPath="$PROJECT_DIR$/starApi/utils/ticket/request/tool/ticket_tool.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/router/routes/modules/dashboard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/router/routes/modules/dashboard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,7 +49,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;git@github.com:peng0928/stock.git&quot;,
-    &quot;accountId&quot;: &quot;f767fee9-fe5f-46b8-9b32-321bf7e15fbf&quot;
+    &quot;accountId&quot;: &quot;21fa9821-8244-42f9-aad0-14943b102bdb&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -58,27 +65,31 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.main.executor": "Run",
+    "Python.scheduleTasks.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "E:/桌面/Github/github/stock/vue-vben-admin/apps/web-antd/src/store",
+    "last_opened_file_path": "/Users/penr/Desktop/python/GithubProject/stock/vue-vben-admin/apps/web-antd/src/views/dashboard/bankuan",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "E:\\桌面\\Github\\github\\stock\\vue-vben-admin\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "/Users/penr/Desktop/python/GithubProject/stock/vue-vben-admin/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/bankuan" />
       <recent name="E:\桌面\Github\github\stock\vue-vben-admin\apps\web-antd\src\store" />
       <recent name="E:\桌面\Github\github\stock\vue-stock\src" />
       <recent name="E:\桌面\Github\github\stock\vue-quasar-stock" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.api">
+  <component name="RunManager" selected="Python.scheduleTasks">
     <configuration name="api" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="stock" />
       <option name="ENV_FILES" value="" />
@@ -125,8 +136,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="scheduleTasks" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="stock" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/starApi" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/starApi/scheduleTasks.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.scheduleTasks" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.api" />
       </list>
@@ -135,8 +170,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.180" />
-        <option value="bundled-python-sdk-85c76a3b01b3-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.180" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.220" />
+        <option value="bundled-python-sdk-0fc6c617c4bd-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.220" />
       </set>
     </attachedChunks>
   </component>
@@ -153,7 +188,11 @@
       <workItem from="1734521913258" duration="5967000" />
       <workItem from="1734611768119" duration="77000" />
       <workItem from="1734611861119" duration="3719000" />
-      <workItem from="1734616694567" duration="7195000" />
+      <workItem from="1734616694567" duration="6918000" />
+      <workItem from="1734657988879" duration="266000" />
+      <workItem from="1734658567070" duration="2172000" />
+      <workItem from="1734661230181" duration="859000" />
+      <workItem from="1734662102025" duration="9089000" />
     </task>
     <task id="LOCAL-00001" summary="更新">
       <created>1733240733727</created>
@@ -217,6 +256,16 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="python:Django" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:prettier" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:tailwindcss" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:vite" />
+    <option featureType="dependencySupport" implementationName="python:kafka-python" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:vue" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:postcss" />
+    <option featureType="dependencySupport" implementationName="python:confluent-kafka" />
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
@@ -233,26 +282,9 @@
     <MESSAGE value="更新" />
     <option name="LAST_COMMIT_MESSAGE" value="更新" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue</url>
-          <line>13</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/vue-vben-admin/apps/web-antd/src/views/dashboard/stockGdb/index.vue</url>
-          <line>33</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/stock$main.coverage" NAME="main Coverage Results" MODIFIED="1733315548619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/starApi" />
+    <SUITE FILE_PATH="coverage/stock$main.coverage" NAME="main Coverage Results" MODIFIED="1734662515260" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/starApi" />
+    <SUITE FILE_PATH="coverage/stock$scheduleTasks.coverage" NAME="scheduleTasks Coverage Results" MODIFIED="1734671415537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/starApi" />
     <SUITE FILE_PATH="coverage/stock$api.coverage" NAME="api Coverage Results" MODIFIED="1733237645323" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/starApi/utils/ticket/request" />
   </component>
 </project>
