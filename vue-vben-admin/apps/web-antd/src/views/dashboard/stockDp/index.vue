@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Card} from 'ant-design-vue';
+import { Card } from 'ant-design-vue';
 
 import {
   AnalysisChartCard,
@@ -8,7 +8,7 @@ import {
 } from '@vben/common-ui';
 import dpanEcharts from './danpan.vue';
 
-const chartTabs: TabOption[] = [
+const chartTabs: [] = [
   {
     label: '上证',
     value: 'trends',
@@ -24,10 +24,10 @@ const chartTabs: TabOption[] = [
   <div class="p-5">
     <AnalysisChartsTabs :tabs="chartTabs" class="mt-5">
       <template #trends>
-        <dpanEcharts zsType="shz"/>
+        <dpanEcharts zsType="shz" />
       </template>
       <template #visits>
-        <dpanEcharts zsType="sz"/>
+        <dpanEcharts zsType="sz" />
       </template>
     </AnalysisChartsTabs>
   </div>

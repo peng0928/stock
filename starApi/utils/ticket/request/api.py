@@ -447,7 +447,7 @@ def main():
     # MongoClient = MongoConn(db='Stock')
     client = RequestClient()
     # stock_data = client.stock_details('0.002131')
-    stock_data = client.stock_kline('1.000001')
+    stock_data = client.stock_kline('0.000008')
     # MongoClient.insert('stock_dbcx', {"date": day, "data": stock_data})
     print(stock_data)
 

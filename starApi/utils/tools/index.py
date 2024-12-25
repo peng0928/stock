@@ -1,3 +1,5 @@
+import json
+
 def to_yi(n):
     fs = False
     try:
@@ -41,3 +43,9 @@ def merge_md(item, value):
         else:
             query.append([md_zh[index], f"{item[index]:.2f}", round(i, 2)])
     return query
+
+def jsons(data):
+    try:
+        return json.loads(data)
+    except:
+        return data
