@@ -1,6 +1,7 @@
 import datetime
 import json
 
+import aiohttp
 from PrSpider import Xpath
 import requests
 
@@ -11,6 +12,15 @@ from utils.ticket.request.tool.ticket_tool import get_previous_workday
 from utils.tools.index import to_yi, to_float_list, merge_md
 from functools import wraps
 
+def catch_exceptions_async(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        try:
+            return await func(*args, **kwargs)
+        except Exception as e:
+            logger.error(f"catch_exceptions_async => {e}")
+            return {"status": False, "msg": "服务暂不可用"}
+    return wrapper
 
 def catch_exceptions(func):
     @wraps(func)
@@ -42,6 +52,14 @@ class RequestClient:
         self.cookie = kwargs.get('cookie')
         self.session = requests.session()
         self.session.headers = self.headers
+    async def __aenter__(self):
+        return self
+
+    async def ensure_session(self):
+        if self.session is None:
+            self.session = aiohttp.ClientSession(headers=self.headers, cookies=self.cookie)
+        return self.session
+    
 
     @catch_exceptions
     def stock_get(self, code):
@@ -381,6 +399,28 @@ class RequestClient:
         json_data = json_data.get('data').get('klines') or {}
         json_data = [i.split(',') for i in json_data]
         return json_data
+
+
+    @catch_exceptions_async
+    async def stock_change(self):
+        """
+        获取异动信息
+        :return:
+        """
+        url = "https://push2ex.eastmoney.com/getAllStockChanges"
+        params = {
+            "type": "32",
+            "cb": "",
+            "ut": "7eea3edcaed734bea9cbfc24409ed989",
+            "pageindex": "0",
+            "pagesize": "10000",
+            "dpt": "wzchanges",
+            "_": ""
+        }
+        async with aiohttp.ClientSession(headers=self.headers, cookies=self.cookie) as session:
+            async with session.get(url, params=params) as response:
+                json_data = await response.json()
+                return json_data.get('data', {}).get('allstock') or []
 
     @catch_exceptions
     def stock_ZTPool(self, days=1):
