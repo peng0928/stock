@@ -59,6 +59,14 @@ const routes: RouteRecordRaw[] = [
           icon: 'proicons:component',
           title: '板块',
         },
+      },{
+        name: '个股',
+        path: '/stock',
+        component: () => import('#/views/dashboard/stock/index.vue'),
+        meta: {
+          icon: 'bytesize:lightning',
+          title: '个股',
+        },
       },
     ],
   },
