@@ -68,6 +68,15 @@ const routes: RouteRecordRaw[] = [
           title: '个股',
         },
       },
+      {
+        name: '异动',
+        path: '/change',
+        component: () => import('#/views/dashboard/stockChange/index.vue'),
+        meta: {
+          icon: 'lucide:trending-up',
+          title: '异动',
+        },
+      },
     ],
   },
 ];
